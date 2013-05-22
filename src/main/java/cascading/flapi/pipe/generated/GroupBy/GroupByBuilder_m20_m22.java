@@ -1,5 +1,5 @@
 
-package cascading.flapi.pipe.generated.Pipe;
+package cascading.flapi.pipe.generated.GroupBy;
 
 import javax.annotation.Generated;
 
@@ -16,16 +16,19 @@ import javax.annotation.Generated;
  * 
  */
 @Generated(value = "unquietcode.tools.flapi", date = "May 22, 2013 17:22:32 CEST", comments = "generated using Flapi, the fluent API generator for Java")
-public class PipeGenerator {
+public interface GroupByBuilder_m20_m22 <_ReturnType >{
 
 
-    @SuppressWarnings("unchecked")
-    public static PipeBuilder_m1_m2_m3_m4_m5_m6_m7_m8_m9_m10_m11 <Void> start(PipeHelper helper) {
-        if (helper == null) {
-            throw new IllegalArgumentException("Helper cannot be null.");
-        }
-         
-        return new ImplPipeBuilder_m1_m2_m3_m4_m5_m6_m7_m8_m9_m10_m11(helper, null);
-    }
+    /**
+     * Apply a GroupBy that will group on the given field names
+     * 
+     */
+    _ReturnType onFields(Comparable... fields);
+
+    /**
+     * Sorts the grouped values on the given fields names
+     * 
+     */
+    GroupByBuilder_m20 <_ReturnType> withSortOnFields(Comparable... sortFields);
 
 }

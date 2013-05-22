@@ -28,10 +28,15 @@ public class PipeBuilderGenerator {
                 /*
                  * top-level helper methods
                  */
+                 
+                .addMethod("from(Object pipe)")
+                    .withDocumentation("Start from the given Pipe. " +
+                    		"Note that any work done by this builder before the call to 'from' will be lost.")
+                .atMost(1)
                 
                 .addMethod("withName(String name)")
-                    .withDocumentation("The name of the pipe")
-                .atMost(1)
+                    .withDocumentation("Set the name of the pipe. Can be called many times, to rename the pipe mid-way down.")
+                .any()
                 
                 /*
                  * Each
@@ -97,28 +102,71 @@ public class PipeBuilderGenerator {
                  * GroupBy
                  */
                  
-                 .startBlock("GroupBy", "groupBy()")
-                     .withDocumentation("Start a new GroupBy")
-                 .any()
+                .startBlock("GroupBy", "groupBy()")
+                    .withDocumentation("Start a new GroupBy")
+                .any()
                      
-                     .addMethod("reversed()")
-                         .withDocumentation("Reverse the GroupBy")
-                     .atMost(1)
+                    .addMethod("reversed()")
+                        .withDocumentation("Reverse the GroupBy")
+                    .atMost(1)
                      
-                     .addMethod("withSortOnFields(Comparable... sortFields)")
-                         .withDocumentation("Sorts the grouped values on the given fields names")
-                     .atMost(1)
+                    .addMethod("withSortOnFields(Comparable... sortFields)")
+                        .withDocumentation("Sorts the grouped values on the given fields names")
+                    .atMost(1)
                      
-                     .addMethod("onFields(Comparable... fields)")
-                         .withDocumentation("Apply a GroupBy that will group on the given field names")
-                     .last()
+                    .addMethod("onFields(Comparable... fields)")
+                        .withDocumentation("Apply a GroupBy that will group on the given field names")
+                    .last()
                  
-                 .endBlock()
-        
+                .endBlock()
+                 
+                /*
+                 * Rename
+                 */
+                  
+                .startBlock("RenameField", "renameField(String field)")
+                    .withDocumentation("Rename the given field")
+                .any()
+
+                    .addMethod("to(String newName)")
+                        .withDocumentation("New name of the field")
+                    .last()
+
+                .endBlock()
+
+                /*
+                 * Retain / Discard
+                 */
+
+                .addMethod("retain(Comparable... fieldsToKeep)")
+                    .withDocumentation("Retain only the given fields")
+                .any()
+
+                .addMethod("discard(Comparable... fieldsToDiscard)")
+                    .withDocumentation("Discard the given fields")
+                .any()
+
+                /*
+                 * Unique
+                 */
+
+                .addMethod("unique(Comparable... uniqueFields)")
+                    .withDocumentation("Filter all duplicates out of a tuple stream.")
+                .any()
+
+                /*
+                 * Count
+                 */
+
+                .addMethod("count(String fieldDeclaration)")
+                    .withDocumentation("Count all the values and store the result as a long in the given fieldDeclaration.")
+                .any()
+
                 .build();
-        
+
         // descriptor.writeToFolder("/path/to/cascading-flapi/src/main/java");
-        descriptor.writeToFolder(args[0]);
+        descriptor.writeToFolder("/data/vbehar/projects/cascading-flapi/src/main/java");
+        //descriptor.writeToFolder(args[0]);
     }
 
 }

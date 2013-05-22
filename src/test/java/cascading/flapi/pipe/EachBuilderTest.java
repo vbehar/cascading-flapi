@@ -14,6 +14,7 @@ import cascading.operation.filter.Not;
 import cascading.pipe.Each;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
+import cascading.tuple.Tuple;
 
 /**
  * Tests for all the Each-related operations
@@ -90,6 +91,14 @@ public class EachBuilderTest {
         
         Each each = (Each) pipe;
         assertThat(each.getFunction()).isInstanceOf(Insert.class);
+        assertThat(each.getFunction().getFieldDeclaration()).isEqualTo(new Fields("key"));
+        
+        Field valuesField = Insert.class.getDeclaredField("values");
+        valuesField.setAccessible(true);
+        Object valuesObj = valuesField.get(each.getFunction());
+        assertThat(valuesObj).isInstanceOf(Tuple.class);
+        Tuple values = (Tuple) valuesObj;
+        assertThat(values).isEqualTo(new Tuple("value"));
     }
 
     @Test

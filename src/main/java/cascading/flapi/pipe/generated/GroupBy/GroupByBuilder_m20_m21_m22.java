@@ -1,5 +1,5 @@
 
-package cascading.flapi.pipe.generated.Every;
+package cascading.flapi.pipe.generated.GroupBy;
 
 import javax.annotation.Generated;
 
@@ -16,25 +16,25 @@ import javax.annotation.Generated;
  * 
  */
 @Generated(value = "unquietcode.tools.flapi", date = "May 22, 2013 17:22:32 CEST", comments = "generated using Flapi, the fluent API generator for Java")
-public interface EveryHelper {
+public interface GroupByBuilder_m20_m21_m22 <_ReturnType >{
 
 
     /**
-     * Apply the given cascading Aggregator or Buffer
+     * Apply a GroupBy that will group on the given field names
      * 
      */
-    void aggregate(Object aggregator);
+    _ReturnType onFields(Comparable... fields);
 
     /**
-     * Restrict the fields to be used as the 'output selection' for this operation
+     * Reverse the GroupBy
      * 
      */
-    void produce(Comparable... output);
+    GroupByBuilder_m20_m22 <_ReturnType> reversed();
 
     /**
-     * Restrict the fields to be used as the 'argument selector' for this operation
+     * Sorts the grouped values on the given fields names
      * 
      */
-    void select(Comparable... arguments);
+    GroupByBuilder_m20_m21 <_ReturnType> withSortOnFields(Comparable... sortFields);
 
 }

@@ -16,49 +16,37 @@ import javax.annotation.Generated;
  * 
  */
 @Generated(value = "unquietcode.tools.flapi", date = "May 22, 2013 17:22:32 CEST", comments = "generated using Flapi, the fluent API generator for Java")
-public interface EachHelper {
+public interface EachBuilder_m12_m13_m14_m15_m16 <_ReturnType >{
 
 
     /**
      * Allow the function applied to this operation to override some fields given as the input.
      * 
      */
-    void allowOverride();
+    EachBuilder_m13_m14_m15_m16 <_ReturnType> allowOverride();
 
     /**
      * Apply the given cascading Function
      * 
      */
-    void applyFunction(Object function);
+    _ReturnType applyFunction(Object function);
 
     /**
      * Filter in (= keep) only the tuples matching the given cascading Filter
      * 
      */
-    void filterIn(Object filter);
+    _ReturnType filterIn(Object filter);
 
     /**
      * Filter out the tuples matching the given cascading Filter
      * 
      */
-    void filterOut(Object filter);
+    _ReturnType filterOut(Object filter);
 
     /**
      * Shortcut to apply the Insert cascading Function : insert the given value for the given field.
      * 
      */
-    void insert(String field, Object value);
-
-    /**
-     * Restrict the fields to be used as the 'output selection' for this operation
-     * 
-     */
-    void produce(Comparable... output);
-
-    /**
-     * Restrict the fields to be used as the 'argument selector' for this operation
-     * 
-     */
-    void select(Comparable... arguments);
+    _ReturnType insert(String field, Object value);
 
 }

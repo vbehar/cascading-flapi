@@ -2,12 +2,11 @@
 package cascading.flapi.pipe.generated.Pipe;
 
 import javax.annotation.Generated;
-import cascading.flapi.pipe.generated.Each.EachHelper;
-import cascading.flapi.pipe.generated.Every.EveryHelper;
-import cascading.flapi.pipe.generated.GroupBy.GroupByHelper;
-import cascading.flapi.pipe.generated.RenameField.RenameFieldHelper;
+import cascading.flapi.pipe.generated.Each.EachBuilder_m12_m13_m14_m15_m16_m17_m18;
+import cascading.flapi.pipe.generated.Every.EveryBuilder_m19_m17_m18;
+import cascading.flapi.pipe.generated.GroupBy.GroupByBuilder_m20_m21_m22;
+import cascading.flapi.pipe.generated.RenameField.RenameFieldBuilder_m23;
 import cascading.pipe.Pipe;
-import unquietcode.tools.flapi.support.ObjectWrapper;
 
 
 /**
@@ -22,44 +21,38 @@ import unquietcode.tools.flapi.support.ObjectWrapper;
  * 
  */
 @Generated(value = "unquietcode.tools.flapi", date = "May 22, 2013 17:22:32 CEST", comments = "generated using Flapi, the fluent API generator for Java")
-public interface PipeHelper {
+public interface PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType >{
 
 
     /**
      * Count all the values and store the result as a long in the given fieldDeclaration.
      * 
      */
-    void count(String fieldDeclaration);
+    PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType> count(String fieldDeclaration);
 
     /**
      * Discard the given fields
      * 
      */
-    void discard(Comparable... fieldsToDiscard);
+    PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType> discard(Comparable... fieldsToDiscard);
 
     /**
      * Start a new Each operation
      * 
      */
-    void each(ObjectWrapper<EachHelper> _helper1);
+    EachBuilder_m12_m13_m14_m15_m16_m17_m18 <PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType>> each();
 
     /**
      * Start a new Every operation
      * 
      */
-    void every(ObjectWrapper<EveryHelper> _helper1);
-
-    /**
-     * Start from the given Pipe. Note that any work done by this builder before the call to 'from' will be lost.
-     * 
-     */
-    void from(Object pipe);
+    EveryBuilder_m19_m17_m18 <PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType>> every();
 
     /**
      * Start a new GroupBy
      * 
      */
-    void groupBy(ObjectWrapper<GroupByHelper> _helper1);
+    GroupByBuilder_m20_m21_m22 <PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType>> groupBy();
 
     /**
      * End the builder and return the cascading Pipe
@@ -71,24 +64,24 @@ public interface PipeHelper {
      * Rename the given field
      * 
      */
-    void renameField(String field, ObjectWrapper<RenameFieldHelper> _helper1);
+    RenameFieldBuilder_m23 <PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType>> renameField(String field);
 
     /**
      * Retain only the given fields
      * 
      */
-    void retain(Comparable... fieldsToKeep);
+    PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType> retain(Comparable... fieldsToKeep);
 
     /**
      * Filter all duplicates out of a tuple stream.
      * 
      */
-    void unique(Comparable... uniqueFields);
+    PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType> unique(Comparable... uniqueFields);
 
     /**
      * Set the name of the pipe. Can be called many times, to rename the pipe mid-way down.
      * 
      */
-    void withName(String name);
+    PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType> withName(String name);
 
 }

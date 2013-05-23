@@ -12,11 +12,11 @@ import javax.annotation.Generated;
  * Visit https://github.com/UnquietCode/Flapi for more information.
  * 
  * 
- * Generated on May 22, 2013 17:22:32 CEST using version 0.3
+ * Generated on May 23, 2013 14:21:13 CEST using version 0.3
  * 
  */
-@Generated(value = "unquietcode.tools.flapi", date = "May 22, 2013 17:22:32 CEST", comments = "generated using Flapi, the fluent API generator for Java")
-public interface GroupByBuilder_m20_m22 <_ReturnType >{
+@Generated(value = "unquietcode.tools.flapi", date = "May 23, 2013 14:21:13 CEST", comments = "generated using Flapi, the fluent API generator for Java")
+public interface GroupByBuilder_m21_m22_m23 <_ReturnType >{
 
 
     /**
@@ -26,9 +26,15 @@ public interface GroupByBuilder_m20_m22 <_ReturnType >{
     _ReturnType onFields(Comparable... fields);
 
     /**
+     * Reverse the GroupBy
+     * 
+     */
+    GroupByBuilder_m21_m23 <_ReturnType> reversed();
+
+    /**
      * Sorts the grouped values on the given fields names
      * 
      */
-    GroupByBuilder_m20 <_ReturnType> withSortOnFields(Comparable... sortFields);
+    GroupByBuilder_m21_m22 <_ReturnType> withSortOnFields(Comparable... sortFields);
 
 }

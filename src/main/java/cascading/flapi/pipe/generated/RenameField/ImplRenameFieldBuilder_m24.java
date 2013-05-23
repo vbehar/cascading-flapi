@@ -1,5 +1,5 @@
 
-package cascading.flapi.pipe.generated.GroupBy;
+package cascading.flapi.pipe.generated.RenameField;
 
 import javax.annotation.Generated;
 import unquietcode.tools.flapi.support.BuilderImplementation;
@@ -13,18 +13,18 @@ import unquietcode.tools.flapi.support.BuilderImplementation;
  * Visit https://github.com/UnquietCode/Flapi for more information.
  * 
  * 
- * Generated on May 22, 2013 17:22:32 CEST using version 0.3
+ * Generated on May 23, 2013 14:21:13 CEST using version 0.3
  * 
  */
-@Generated(value = "unquietcode.tools.flapi", date = "May 22, 2013 17:22:32 CEST", comments = "generated using Flapi, the fluent API generator for Java")
-public class ImplGroupByBuilder_m20_m21
-    implements GroupByBuilder_m20_m21, BuilderImplementation
+@Generated(value = "unquietcode.tools.flapi", date = "May 23, 2013 14:21:13 CEST", comments = "generated using Flapi, the fluent API generator for Java")
+public class ImplRenameFieldBuilder_m24
+    implements RenameFieldBuilder_m24, BuilderImplementation
 {
 
-    private final GroupByHelper _helper;
+    private final RenameFieldHelper _helper;
     private final Object _returnValue;
 
-    public ImplGroupByBuilder_m20_m21(GroupByHelper helper, Object returnValue) {
+    public ImplRenameFieldBuilder_m24(RenameFieldHelper helper, Object returnValue) {
         _helper = helper;
         _returnValue = returnValue;
     }
@@ -46,26 +46,14 @@ public class ImplGroupByBuilder_m20_m21
     }
 
     /**
-     * Apply a GroupBy that will group on the given field names
+     * New name of the field
      * 
      */
-    public Object onFields(Comparable... fields) {
+    public Object to(String newName) {
         _checkInvocations();
-        _helper.onFields(fields);
+        _helper.to(newName);
          
         return _returnValue;
-    }
-
-    /**
-     * Reverse the GroupBy
-     * 
-     */
-    public GroupByBuilder_m20 reversed() {
-        _helper.reversed();
-        ImplGroupByBuilder_m20 step1 = new ImplGroupByBuilder_m20(_helper, _returnValue);
-         
-        _transferInvocations(step1);
-        return step1;
     }
 
 }

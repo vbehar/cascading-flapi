@@ -26,14 +26,13 @@ class PipeBuilderHelper implements PipeHelper {
         return pipeWrapper.get();
     }
 
-
     @Override
     public void from(Object pipe) {
-        if(!Pipe.class.isInstance(pipe)) {
+        if (!Pipe.class.isInstance(pipe)) {
             throw new IllegalArgumentException(pipe.getClass().getName() + " is not a cascading Pipe !");
         }
-        
-        pipeWrapper.set((Pipe)pipe);
+
+        pipeWrapper.set((Pipe) pipe);
     }
 
     @Override

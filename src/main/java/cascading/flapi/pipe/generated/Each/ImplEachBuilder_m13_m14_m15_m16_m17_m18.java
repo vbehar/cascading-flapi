@@ -2,7 +2,11 @@
 package cascading.flapi.pipe.generated.Each;
 
 import javax.annotation.Generated;
+import cascading.flapi.pipe.generated.InsertField.ImplInsertFieldBuilder_m19;
+import cascading.flapi.pipe.generated.InsertField.InsertFieldBuilder_m19;
+import cascading.flapi.pipe.generated.InsertField.InsertFieldHelper;
 import unquietcode.tools.flapi.support.BuilderImplementation;
+import unquietcode.tools.flapi.support.ObjectWrapper;
 
 
 /**
@@ -13,10 +17,10 @@ import unquietcode.tools.flapi.support.BuilderImplementation;
  * Visit https://github.com/UnquietCode/Flapi for more information.
  * 
  * 
- * Generated on May 22, 2013 17:22:32 CEST using version 0.3
+ * Generated on May 23, 2013 14:21:13 CEST using version 0.3
  * 
  */
-@Generated(value = "unquietcode.tools.flapi", date = "May 22, 2013 17:22:32 CEST", comments = "generated using Flapi, the fluent API generator for Java")
+@Generated(value = "unquietcode.tools.flapi", date = "May 23, 2013 14:21:13 CEST", comments = "generated using Flapi, the fluent API generator for Java")
 public class ImplEachBuilder_m13_m14_m15_m16_m17_m18
     implements EachBuilder_m13_m14_m15_m16_m17_m18, BuilderImplementation
 {
@@ -79,14 +83,16 @@ public class ImplEachBuilder_m13_m14_m15_m16_m17_m18
     }
 
     /**
-     * Shortcut to apply the Insert cascading Function : insert the given value for the given field.
+     * Shortcut to apply the Insert cascading Function : insert the given field in each tuple.
      * 
      */
-    public Object insert(String field, Object value) {
+    public InsertFieldBuilder_m19 insertField(String field) {
         _checkInvocations();
-        _helper.insert(field, value);
+        ObjectWrapper<InsertFieldHelper> helper1 = new ObjectWrapper<InsertFieldHelper>();
+        _helper.insertField(field, helper1);
+        ImplInsertFieldBuilder_m19 step1 = new ImplInsertFieldBuilder_m19(helper1 .get(), _returnValue);
          
-        return _returnValue;
+        return step1;
     }
 
     /**

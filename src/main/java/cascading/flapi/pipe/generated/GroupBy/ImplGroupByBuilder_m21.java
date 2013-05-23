@@ -13,18 +13,18 @@ import unquietcode.tools.flapi.support.BuilderImplementation;
  * Visit https://github.com/UnquietCode/Flapi for more information.
  * 
  * 
- * Generated on May 22, 2013 17:22:32 CEST using version 0.3
+ * Generated on May 23, 2013 14:21:13 CEST using version 0.3
  * 
  */
-@Generated(value = "unquietcode.tools.flapi", date = "May 22, 2013 17:22:32 CEST", comments = "generated using Flapi, the fluent API generator for Java")
-public class ImplGroupByBuilder_m20_m21_m22
-    implements GroupByBuilder_m20_m21_m22, BuilderImplementation
+@Generated(value = "unquietcode.tools.flapi", date = "May 23, 2013 14:21:13 CEST", comments = "generated using Flapi, the fluent API generator for Java")
+public class ImplGroupByBuilder_m21
+    implements GroupByBuilder_m21, BuilderImplementation
 {
 
     private final GroupByHelper _helper;
     private final Object _returnValue;
 
-    public ImplGroupByBuilder_m20_m21_m22(GroupByHelper helper, Object returnValue) {
+    public ImplGroupByBuilder_m21(GroupByHelper helper, Object returnValue) {
         _helper = helper;
         _returnValue = returnValue;
     }
@@ -54,30 +54,6 @@ public class ImplGroupByBuilder_m20_m21_m22
         _helper.onFields(fields);
          
         return _returnValue;
-    }
-
-    /**
-     * Reverse the GroupBy
-     * 
-     */
-    public GroupByBuilder_m20_m22 reversed() {
-        _helper.reversed();
-        ImplGroupByBuilder_m20_m22 step1 = new ImplGroupByBuilder_m20_m22(_helper, _returnValue);
-         
-        _transferInvocations(step1);
-        return step1;
-    }
-
-    /**
-     * Sorts the grouped values on the given fields names
-     * 
-     */
-    public GroupByBuilder_m20_m21 withSortOnFields(Comparable... sortFields) {
-        _helper.withSortOnFields(sortFields);
-        ImplGroupByBuilder_m20_m21 step1 = new ImplGroupByBuilder_m20_m21(_helper, _returnValue);
-         
-        _transferInvocations(step1);
-        return step1;
     }
 
 }

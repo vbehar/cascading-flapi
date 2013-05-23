@@ -4,11 +4,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
+import cascading.operation.Identity;
+import cascading.operation.Insert;
+import cascading.operation.NoOp;
 import cascading.operation.aggregator.Count;
+import cascading.operation.expression.ExpressionFunction;
+import cascading.operation.filter.FilterNull;
 import cascading.pipe.Each;
 import cascading.pipe.Every;
+import cascading.pipe.GroupBy;
 import cascading.pipe.Pipe;
 import cascading.pipe.assembly.Discard;
+import cascading.pipe.assembly.Rename;
 import cascading.pipe.assembly.Retain;
 import cascading.pipe.assembly.Unique;
 import cascading.tuple.Fields;
@@ -123,6 +130,60 @@ public class PipeBuilderTest {
         Every every = (Every) pipe;
         assertThat(every.getAggregator()).isInstanceOf(Count.class);
         assertThat(every.getAggregator().getFieldDeclaration()).isEqualTo(new Fields("myCount"));
+    }
+
+    @Test
+    public void complexPipe() throws Exception {
+        Pipe pipe = PipeBuilder.start()
+                .each().select("data").filterOut(new FilterNull())
+                .each().insertField("processingDate").withValue(System.currentTimeMillis())
+                .renameField("domains").to("oldDomains")
+                .each().select("url").applyFunction(new ExpressionFunction(new Fields("isRelativeUrl"), "url.startsWith(\"http\")", String.class))
+                .discard("data")
+                .groupBy().withSortOnFields("url").onFields("domain")
+                .count("domains")
+                .pipe();
+        
+        // count
+        assertThat(pipe).isInstanceOf(Every.class);
+        assertThat(((Every)pipe).getOperation()).isInstanceOf(Count.class);
+        
+        // groupBy
+        pipe = pipe.getPrevious()[0];
+        assertThat(pipe).isInstanceOf(GroupBy.class);
+        
+        // discard
+        pipe = pipe.getPrevious()[0];
+        assertThat(pipe).isInstanceOf(Discard.class);
+        pipe = pipe.getPrevious()[0];
+        assertThat(pipe).isInstanceOf(Each.class);
+        assertThat(((Each)pipe).getOperation()).isInstanceOf(NoOp.class);
+        
+        // expression
+        pipe = pipe.getPrevious()[0];
+        assertThat(pipe).isInstanceOf(Each.class);
+        assertThat(((Each)pipe).getOperation()).isInstanceOf(ExpressionFunction.class);
+        
+        // rename
+        pipe = pipe.getPrevious()[0];
+        assertThat(pipe).isInstanceOf(Rename.class);
+        pipe = pipe.getPrevious()[0];
+        assertThat(pipe).isInstanceOf(Each.class);
+        assertThat(((Each)pipe).getOperation()).isInstanceOf(Identity.class);
+        
+        // insert
+        pipe = pipe.getPrevious()[0];
+        assertThat(pipe).isInstanceOf(Each.class);
+        assertThat(((Each)pipe).getOperation()).isInstanceOf(Insert.class);
+        
+        // filter null
+        pipe = pipe.getPrevious()[0];
+        assertThat(pipe).isInstanceOf(Each.class);
+        assertThat(((Each)pipe).getOperation()).isInstanceOf(FilterNull.class);
+        
+        // initial pipe
+        pipe = pipe.getPrevious()[0];
+        assertThat(pipe.getClass()).isEqualTo(Pipe.class);
     }
 
 }

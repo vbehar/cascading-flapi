@@ -3,9 +3,9 @@ package cascading.flapi.pipe.generated.Pipe;
 
 import javax.annotation.Generated;
 import cascading.flapi.pipe.generated.Each.EachBuilder_m12_m13_m14_m15_m16_m17_m18;
-import cascading.flapi.pipe.generated.Every.EveryBuilder_m19_m17_m18;
-import cascading.flapi.pipe.generated.GroupBy.GroupByBuilder_m20_m21_m22;
-import cascading.flapi.pipe.generated.RenameField.RenameFieldBuilder_m23;
+import cascading.flapi.pipe.generated.Every.EveryBuilder_m20_m17_m18;
+import cascading.flapi.pipe.generated.GroupBy.GroupByBuilder_m21_m22_m23;
+import cascading.flapi.pipe.generated.RenameField.RenameFieldBuilder_m24;
 import cascading.pipe.Pipe;
 
 
@@ -17,10 +17,10 @@ import cascading.pipe.Pipe;
  * Visit https://github.com/UnquietCode/Flapi for more information.
  * 
  * 
- * Generated on May 22, 2013 17:22:32 CEST using version 0.3
+ * Generated on May 23, 2013 14:21:13 CEST using version 0.3
  * 
  */
-@Generated(value = "unquietcode.tools.flapi", date = "May 22, 2013 17:22:32 CEST", comments = "generated using Flapi, the fluent API generator for Java")
+@Generated(value = "unquietcode.tools.flapi", date = "May 23, 2013 14:21:13 CEST", comments = "generated using Flapi, the fluent API generator for Java")
 public interface PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType >{
 
 
@@ -46,13 +46,13 @@ public interface PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType >{
      * Start a new Every operation
      * 
      */
-    EveryBuilder_m19_m17_m18 <PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType>> every();
+    EveryBuilder_m20_m17_m18 <PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType>> every();
 
     /**
      * Start a new GroupBy
      * 
      */
-    GroupByBuilder_m20_m21_m22 <PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType>> groupBy();
+    GroupByBuilder_m21_m22_m23 <PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType>> groupBy();
 
     /**
      * End the builder and return the cascading Pipe
@@ -64,7 +64,7 @@ public interface PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType >{
      * Rename the given field
      * 
      */
-    RenameFieldBuilder_m23 <PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType>> renameField(String field);
+    RenameFieldBuilder_m24 <PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 <_ReturnType>> renameField(String field);
 
     /**
      * Retain only the given fields

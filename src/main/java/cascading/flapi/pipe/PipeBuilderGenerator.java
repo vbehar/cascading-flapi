@@ -58,20 +58,26 @@ public class PipeBuilderGenerator {
                         .withDocumentation("Allow the function applied to this operation to override some fields given as the input.")
                     .atMost(1)
                     
-                    .addMethod("insert(String field, Object value)")
-                        .withDocumentation("Shortcut to apply the Insert cascading Function : insert the given value for the given field.")
-                    .last()
-                    
-                    .addMethod("applyFunction(Object function)")
-                        .withDocumentation("Apply the given cascading Function")
-                    .last()
-                    
                     .addMethod("filterOut(Object filter)")
                         .withDocumentation("Filter out the tuples matching the given cascading Filter")
                     .last()
                     
                     .addMethod("filterIn(Object filter)")
                         .withDocumentation("Filter in (= keep) only the tuples matching the given cascading Filter")
+                    .last()
+                    
+                    .addMethod("applyFunction(Object function)")
+                        .withDocumentation("Apply the given cascading Function")
+                    .last()
+                    
+                    .addMethod("insertField(String field)")
+                        .withDocumentation("Shortcut to apply the Insert cascading Function : insert the given field in each tuple.")
+                        .addBlockChain()
+                        .startBlock("InsertField")
+                            .addMethod("withValue(Object value)")
+                                .withDocumentation("The value associated with the field to insert.")
+                            .last()
+                        .endBlock()
                     .last()
                 
                 .endBlock()

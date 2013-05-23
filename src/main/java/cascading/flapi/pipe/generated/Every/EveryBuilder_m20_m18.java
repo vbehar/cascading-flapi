@@ -12,11 +12,11 @@ import javax.annotation.Generated;
  * Visit https://github.com/UnquietCode/Flapi for more information.
  * 
  * 
- * Generated on May 22, 2013 17:22:32 CEST using version 0.3
+ * Generated on May 23, 2013 14:21:13 CEST using version 0.3
  * 
  */
-@Generated(value = "unquietcode.tools.flapi", date = "May 22, 2013 17:22:32 CEST", comments = "generated using Flapi, the fluent API generator for Java")
-public interface EveryBuilder_m19_m18 <_ReturnType >{
+@Generated(value = "unquietcode.tools.flapi", date = "May 23, 2013 14:21:13 CEST", comments = "generated using Flapi, the fluent API generator for Java")
+public interface EveryBuilder_m20_m18 <_ReturnType >{
 
 
     /**
@@ -29,6 +29,6 @@ public interface EveryBuilder_m19_m18 <_ReturnType >{
      * Restrict the fields to be used as the 'argument selector' for this operation
      * 
      */
-    EveryBuilder_m19 <_ReturnType> select(Comparable... arguments);
+    EveryBuilder_m20 <_ReturnType> select(Comparable... arguments);
 
 }

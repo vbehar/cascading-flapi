@@ -1,5 +1,5 @@
 
-package cascading.flapi.pipe.generated.GroupBy;
+package cascading.flapi.pipe.generated.InsertField;
 
 import javax.annotation.Generated;
 import unquietcode.tools.flapi.support.BuilderImplementation;
@@ -13,18 +13,18 @@ import unquietcode.tools.flapi.support.BuilderImplementation;
  * Visit https://github.com/UnquietCode/Flapi for more information.
  * 
  * 
- * Generated on May 22, 2013 17:22:32 CEST using version 0.3
+ * Generated on May 23, 2013 14:21:13 CEST using version 0.3
  * 
  */
-@Generated(value = "unquietcode.tools.flapi", date = "May 22, 2013 17:22:32 CEST", comments = "generated using Flapi, the fluent API generator for Java")
-public class ImplGroupByBuilder_m20
-    implements GroupByBuilder_m20, BuilderImplementation
+@Generated(value = "unquietcode.tools.flapi", date = "May 23, 2013 14:21:13 CEST", comments = "generated using Flapi, the fluent API generator for Java")
+public class ImplInsertFieldBuilder_m19
+    implements InsertFieldBuilder_m19, BuilderImplementation
 {
 
-    private final GroupByHelper _helper;
+    private final InsertFieldHelper _helper;
     private final Object _returnValue;
 
-    public ImplGroupByBuilder_m20(GroupByHelper helper, Object returnValue) {
+    public ImplInsertFieldBuilder_m19(InsertFieldHelper helper, Object returnValue) {
         _helper = helper;
         _returnValue = returnValue;
     }
@@ -46,12 +46,12 @@ public class ImplGroupByBuilder_m20
     }
 
     /**
-     * Apply a GroupBy that will group on the given field names
+     * The value associated with the field to insert.
      * 
      */
-    public Object onFields(Comparable... fields) {
+    public Object withValue(Object value) {
         _checkInvocations();
-        _helper.onFields(fields);
+        _helper.withValue(value);
          
         return _returnValue;
     }

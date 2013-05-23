@@ -2,6 +2,8 @@
 package cascading.flapi.pipe.generated.Each;
 
 import javax.annotation.Generated;
+import cascading.flapi.pipe.generated.InsertField.InsertFieldHelper;
+import unquietcode.tools.flapi.support.ObjectWrapper;
 
 
 /**
@@ -12,10 +14,10 @@ import javax.annotation.Generated;
  * Visit https://github.com/UnquietCode/Flapi for more information.
  * 
  * 
- * Generated on May 22, 2013 17:22:32 CEST using version 0.3
+ * Generated on May 23, 2013 14:21:13 CEST using version 0.3
  * 
  */
-@Generated(value = "unquietcode.tools.flapi", date = "May 22, 2013 17:22:32 CEST", comments = "generated using Flapi, the fluent API generator for Java")
+@Generated(value = "unquietcode.tools.flapi", date = "May 23, 2013 14:21:13 CEST", comments = "generated using Flapi, the fluent API generator for Java")
 public interface EachHelper {
 
 
@@ -44,10 +46,10 @@ public interface EachHelper {
     void filterOut(Object filter);
 
     /**
-     * Shortcut to apply the Insert cascading Function : insert the given value for the given field.
+     * Shortcut to apply the Insert cascading Function : insert the given field in each tuple.
      * 
      */
-    void insert(String field, Object value);
+    void insertField(String field, ObjectWrapper<InsertFieldHelper> _helper1);
 
     /**
      * Restrict the fields to be used as the 'output selection' for this operation

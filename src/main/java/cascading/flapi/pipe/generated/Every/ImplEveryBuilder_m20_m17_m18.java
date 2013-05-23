@@ -13,18 +13,18 @@ import unquietcode.tools.flapi.support.BuilderImplementation;
  * Visit https://github.com/UnquietCode/Flapi for more information.
  * 
  * 
- * Generated on May 22, 2013 17:22:32 CEST using version 0.3
+ * Generated on May 23, 2013 14:21:13 CEST using version 0.3
  * 
  */
-@Generated(value = "unquietcode.tools.flapi", date = "May 22, 2013 17:22:32 CEST", comments = "generated using Flapi, the fluent API generator for Java")
-public class ImplEveryBuilder_m19_m17_m18
-    implements EveryBuilder_m19_m17_m18, BuilderImplementation
+@Generated(value = "unquietcode.tools.flapi", date = "May 23, 2013 14:21:13 CEST", comments = "generated using Flapi, the fluent API generator for Java")
+public class ImplEveryBuilder_m20_m17_m18
+    implements EveryBuilder_m20_m17_m18, BuilderImplementation
 {
 
     private final EveryHelper _helper;
     private final Object _returnValue;
 
-    public ImplEveryBuilder_m19_m17_m18(EveryHelper helper, Object returnValue) {
+    public ImplEveryBuilder_m20_m17_m18(EveryHelper helper, Object returnValue) {
         _helper = helper;
         _returnValue = returnValue;
     }
@@ -60,9 +60,9 @@ public class ImplEveryBuilder_m19_m17_m18
      * Restrict the fields to be used as the 'output selection' for this operation
      * 
      */
-    public EveryBuilder_m19_m18 produce(Comparable... output) {
+    public EveryBuilder_m20_m18 produce(Comparable... output) {
         _helper.produce(output);
-        ImplEveryBuilder_m19_m18 step1 = new ImplEveryBuilder_m19_m18(_helper, _returnValue);
+        ImplEveryBuilder_m20_m18 step1 = new ImplEveryBuilder_m20_m18(_helper, _returnValue);
          
         _transferInvocations(step1);
         return step1;
@@ -72,9 +72,9 @@ public class ImplEveryBuilder_m19_m17_m18
      * Restrict the fields to be used as the 'argument selector' for this operation
      * 
      */
-    public EveryBuilder_m19_m17 select(Comparable... arguments) {
+    public EveryBuilder_m20_m17 select(Comparable... arguments) {
         _helper.select(arguments);
-        ImplEveryBuilder_m19_m17 step1 = new ImplEveryBuilder_m19_m17(_helper, _returnValue);
+        ImplEveryBuilder_m20_m17 step1 = new ImplEveryBuilder_m20_m17(_helper, _returnValue);
          
         _transferInvocations(step1);
         return step1;

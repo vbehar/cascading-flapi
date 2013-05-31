@@ -24,14 +24,14 @@ import unquietcode.tools.flapi.support.ObjectWrapper;
  * 
  */
 @Generated(value = "unquietcode.tools.flapi", date = "May 30, 2013 18:39:44 CEST", comments = "generated using Flapi, the fluent API generator for Java")
-public class ImplEachBuilder_m13_m14_m15_m16_m17_m18
-    implements EachBuilder_m13_m14_m15_m16_m17_m18, BuilderImplementation
+public class ImplEachBuilder_m13_m14_m15_m16_m17_m18_m19_m20
+    implements EachBuilder_m13_m14_m15_m16_m17_m18_m19_m20, BuilderImplementation
 {
 
     private final EachHelper _helper;
     private final Object _returnValue;
 
-    public ImplEachBuilder_m13_m14_m15_m16_m17_m18(EachHelper helper, Object returnValue) {
+    public ImplEachBuilder_m13_m14_m15_m16_m17_m18_m19_m20(EachHelper helper, Object returnValue) {
         _helper = helper;
         _returnValue = returnValue;
     }
@@ -121,6 +121,30 @@ public class ImplEachBuilder_m13_m14_m15_m16_m17_m18
         _helper.insertField(field, helper1);
         ImplInsertFieldBuilder_m23 step1 = new ImplInsertFieldBuilder_m23(helper1 .get(), _returnValue);
          
+        return step1;
+    }
+
+    /**
+     * Restrict the fields to be used as the 'output selection' for this operation
+     * 
+     */
+    public EachBuilder_m13_m14_m15_m16_m17_m18_m20 produce(Comparable... output) {
+        _helper.produce(output);
+        ImplEachBuilder_m13_m14_m15_m16_m17_m18_m20 step1 = new ImplEachBuilder_m13_m14_m15_m16_m17_m18_m20(_helper, _returnValue);
+         
+        _transferInvocations(step1);
+        return step1;
+    }
+
+    /**
+     * Restrict the fields to be used as the 'argument selector' for this operation
+     * 
+     */
+    public EachBuilder_m13_m14_m15_m16_m17_m18_m19 select(Comparable... arguments) {
+        _helper.select(arguments);
+        ImplEachBuilder_m13_m14_m15_m16_m17_m18_m19 step1 = new ImplEachBuilder_m13_m14_m15_m16_m17_m18_m19(_helper, _returnValue);
+         
+        _transferInvocations(step1);
         return step1;
     }
 

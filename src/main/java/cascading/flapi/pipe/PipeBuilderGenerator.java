@@ -29,12 +29,12 @@ public class PipeBuilderGenerator {
                  * top-level helper methods
                  */
                  
-                .addMethod("from(Object pipe)")
+                .addMethod("from(Object initialPipe)")
                     .withDocumentation("Start from the given Pipe. " +
                     		"Note that any work done by this builder before the call to 'from' will be lost.")
                 .atMost(1)
                 
-                .addMethod("withName(String name)")
+                .addMethod("withName(String pipeName)")
                     .withDocumentation("Set the name of the pipe. Can be called many times, to rename the pipe mid-way down.")
                 .any()
                 
@@ -64,6 +64,21 @@ public class PipeBuilderGenerator {
                     
                     .addMethod("filterIn(Object filter)")
                         .withDocumentation("Filter in (= keep) only the tuples matching the given cascading Filter")
+                    .last()
+                    
+                    .startBlock("Filter", "filterOut()")
+                        .withDocumentation("Start a new FilterOut Operation")
+                    .last()
+                        .addMethod("nullValues()")
+                            .withDocumentation("Filter the Null values.")
+                        .last()
+                        .addMethod("valuesMatchingExpression(String expression, Class parameterType)")
+                            .withDocumentation("Filter the values matching the given java expression.")
+                        .last()
+                    .endBlock()
+                    
+                    .addBlockReference("Filter", "filterIn()")
+                        .withDocumentation("Start a new FilterIn (= keep) Operation")
                     .last()
                     
                     .addMethod("applyFunction(Object function)")

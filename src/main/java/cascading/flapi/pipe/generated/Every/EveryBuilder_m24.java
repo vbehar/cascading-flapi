@@ -1,5 +1,5 @@
 
-package cascading.flapi.pipe.generated.InsertField;
+package cascading.flapi.pipe.generated.Every;
 
 import javax.annotation.Generated;
 
@@ -16,13 +16,13 @@ import javax.annotation.Generated;
  * 
  */
 @Generated(value = "unquietcode.tools.flapi", date = "May 30, 2013 18:39:44 CEST", comments = "generated using Flapi, the fluent API generator for Java")
-public interface InsertFieldHelper {
+public interface EveryBuilder_m24 <_ReturnType >{
 
 
     /**
-     * The value associated with the field to insert.
+     * Apply the given cascading Aggregator or Buffer
      * 
      */
-    void withValue(Object value);
+    _ReturnType aggregate(Object aggregator);
 
 }

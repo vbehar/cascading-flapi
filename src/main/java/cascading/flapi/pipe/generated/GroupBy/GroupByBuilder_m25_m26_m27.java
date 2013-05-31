@@ -1,5 +1,5 @@
 
-package cascading.flapi.pipe.generated.InsertField;
+package cascading.flapi.pipe.generated.GroupBy;
 
 import javax.annotation.Generated;
 
@@ -16,13 +16,25 @@ import javax.annotation.Generated;
  * 
  */
 @Generated(value = "unquietcode.tools.flapi", date = "May 30, 2013 18:39:44 CEST", comments = "generated using Flapi, the fluent API generator for Java")
-public interface InsertFieldHelper {
+public interface GroupByBuilder_m25_m26_m27 <_ReturnType >{
 
 
     /**
-     * The value associated with the field to insert.
+     * Apply a GroupBy that will group on the given field names
      * 
      */
-    void withValue(Object value);
+    _ReturnType onFields(Comparable... fields);
+
+    /**
+     * Reverse the GroupBy
+     * 
+     */
+    GroupByBuilder_m25_m27 <_ReturnType> reversed();
+
+    /**
+     * Sorts the grouped values on the given fields names
+     * 
+     */
+    GroupByBuilder_m25_m26 <_ReturnType> withSortOnFields(Comparable... sortFields);
 
 }

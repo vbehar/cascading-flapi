@@ -1,5 +1,5 @@
 
-package cascading.flapi.pipe.generated.InsertField;
+package cascading.flapi.pipe.generated.Filter;
 
 import javax.annotation.Generated;
 
@@ -16,13 +16,19 @@ import javax.annotation.Generated;
  * 
  */
 @Generated(value = "unquietcode.tools.flapi", date = "May 30, 2013 18:39:44 CEST", comments = "generated using Flapi, the fluent API generator for Java")
-public interface InsertFieldHelper {
+public interface FilterBuilder_m21_m22 <_ReturnType >{
 
 
     /**
-     * The value associated with the field to insert.
+     * Filter the Null values.
      * 
      */
-    void withValue(Object value);
+    _ReturnType nullValues();
+
+    /**
+     * Filter the values matching the given java expression.
+     * 
+     */
+    _ReturnType valuesMatchingExpression(String expression, Class parameterType);
 
 }

@@ -2,8 +2,11 @@
 package cascading.flapi.pipe.generated.Each;
 
 import javax.annotation.Generated;
-import cascading.flapi.pipe.generated.InsertField.ImplInsertFieldBuilder_m19;
-import cascading.flapi.pipe.generated.InsertField.InsertFieldBuilder_m19;
+import cascading.flapi.pipe.generated.Filter.FilterBuilder_m21_m22;
+import cascading.flapi.pipe.generated.Filter.FilterHelper;
+import cascading.flapi.pipe.generated.Filter.ImplFilterBuilder_m21_m22;
+import cascading.flapi.pipe.generated.InsertField.ImplInsertFieldBuilder_m23;
+import cascading.flapi.pipe.generated.InsertField.InsertFieldBuilder_m23;
 import cascading.flapi.pipe.generated.InsertField.InsertFieldHelper;
 import unquietcode.tools.flapi.support.BuilderImplementation;
 import unquietcode.tools.flapi.support.ObjectWrapper;
@@ -17,10 +20,10 @@ import unquietcode.tools.flapi.support.ObjectWrapper;
  * Visit https://github.com/UnquietCode/Flapi for more information.
  * 
  * 
- * Generated on May 23, 2013 14:21:13 CEST using version 0.3
+ * Generated on May 30, 2013 18:39:44 CEST using version 0.3
  * 
  */
-@Generated(value = "unquietcode.tools.flapi", date = "May 23, 2013 14:21:13 CEST", comments = "generated using Flapi, the fluent API generator for Java")
+@Generated(value = "unquietcode.tools.flapi", date = "May 30, 2013 18:39:44 CEST", comments = "generated using Flapi, the fluent API generator for Java")
 public class ImplEachBuilder_m12_m13_m14_m15_m16_m17_m18
     implements EachBuilder_m12_m13_m14_m15_m16_m17_m18, BuilderImplementation
 {
@@ -73,6 +76,19 @@ public class ImplEachBuilder_m12_m13_m14_m15_m16_m17_m18
     }
 
     /**
+     * Start a new FilterIn (= keep) Operation
+     * 
+     */
+    public FilterBuilder_m21_m22 filterIn() {
+        _checkInvocations();
+        ObjectWrapper<FilterHelper> helper1 = new ObjectWrapper<FilterHelper>();
+        _helper.filterIn(helper1);
+        ImplFilterBuilder_m21_m22 step1 = new ImplFilterBuilder_m21_m22(helper1 .get(), _returnValue);
+         
+        return step1;
+    }
+
+    /**
      * Filter in (= keep) only the tuples matching the given cascading Filter
      * 
      */
@@ -81,6 +97,19 @@ public class ImplEachBuilder_m12_m13_m14_m15_m16_m17_m18
         _helper.filterIn(filter);
          
         return _returnValue;
+    }
+
+    /**
+     * Start a new FilterOut Operation
+     * 
+     */
+    public FilterBuilder_m21_m22 filterOut() {
+        _checkInvocations();
+        ObjectWrapper<FilterHelper> helper1 = new ObjectWrapper<FilterHelper>();
+        _helper.filterOut(helper1);
+        ImplFilterBuilder_m21_m22 step1 = new ImplFilterBuilder_m21_m22(helper1 .get(), _returnValue);
+         
+        return step1;
     }
 
     /**
@@ -98,36 +127,12 @@ public class ImplEachBuilder_m12_m13_m14_m15_m16_m17_m18
      * Shortcut to apply the Insert cascading Function : insert the given field in each tuple.
      * 
      */
-    public InsertFieldBuilder_m19 insertField(String field) {
+    public InsertFieldBuilder_m23 insertField(String field) {
         _checkInvocations();
         ObjectWrapper<InsertFieldHelper> helper1 = new ObjectWrapper<InsertFieldHelper>();
         _helper.insertField(field, helper1);
-        ImplInsertFieldBuilder_m19 step1 = new ImplInsertFieldBuilder_m19(helper1 .get(), _returnValue);
+        ImplInsertFieldBuilder_m23 step1 = new ImplInsertFieldBuilder_m23(helper1 .get(), _returnValue);
          
-        return step1;
-    }
-
-    /**
-     * Restrict the fields to be used as the 'output selection' for this operation
-     * 
-     */
-    public EachBuilder_m12_m13_m14_m15_m16_m18 produce(Comparable... output) {
-        _helper.produce(output);
-        ImplEachBuilder_m12_m13_m14_m15_m16_m18 step1 = new ImplEachBuilder_m12_m13_m14_m15_m16_m18(_helper, _returnValue);
-         
-        _transferInvocations(step1);
-        return step1;
-    }
-
-    /**
-     * Restrict the fields to be used as the 'argument selector' for this operation
-     * 
-     */
-    public EachBuilder_m12_m13_m14_m15_m16_m17 select(Comparable... arguments) {
-        _helper.select(arguments);
-        ImplEachBuilder_m12_m13_m14_m15_m16_m17 step1 = new ImplEachBuilder_m12_m13_m14_m15_m16_m17(_helper, _returnValue);
-         
-        _transferInvocations(step1);
         return step1;
     }
 

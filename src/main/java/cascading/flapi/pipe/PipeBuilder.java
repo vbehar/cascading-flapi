@@ -21,21 +21,21 @@ public class PipeBuilder {
     /**
      * Starts a new instance of PipeBuilder, with the given name
      * 
-     * @param name
+     * @param pipeName
      *            of the initial Pipe
      */
-    public static PipeBuilder_m1_m2_m3_m4_m5_m6_m7_m8_m9_m10_m11<Void> start(String name) {
-        return PipeGenerator.start(new PipeBuilderHelper()).withName(name);
+    public static PipeBuilder_m1_m2_m3_m4_m5_m6_m7_m8_m9_m10_m11<Void> start(String pipeName) {
+        return PipeGenerator.start(new PipeBuilderHelper()).withName(pipeName);
     }
 
     /**
      * Starts a new instance of PipeBuilder, from the given Pipe
      * 
-     * @param pipe
+     * @param initialPipe
      *            to start from
      */
-    public static PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11<Void> from(Pipe pipe) {
-        return PipeGenerator.start(new PipeBuilderHelper()).from(pipe);
+    public static PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11<Void> from(Pipe initialPipe) {
+        return PipeGenerator.start(new PipeBuilderHelper()).from(initialPipe);
     }
 
     static Fields getSelector(Comparable<?>... fields) {

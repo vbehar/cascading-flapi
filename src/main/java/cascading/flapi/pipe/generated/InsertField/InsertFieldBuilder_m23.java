@@ -16,13 +16,13 @@ import javax.annotation.Generated;
  * 
  */
 @Generated(value = "unquietcode.tools.flapi", date = "May 30, 2013 18:39:44 CEST", comments = "generated using Flapi, the fluent API generator for Java")
-public interface InsertFieldHelper {
+public interface InsertFieldBuilder_m23 <_ReturnType >{
 
 
     /**
      * The value associated with the field to insert.
      * 
      */
-    void withValue(Object value);
+    _ReturnType withValue(Object value);
 
 }

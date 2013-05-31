@@ -135,7 +135,7 @@ public class PipeBuilderTest {
     @Test
     public void complexPipe() throws Exception {
         Pipe pipe = PipeBuilder.start()
-                .each().select("data").filterOut(new FilterNull())
+                .each().select("data").filterOut().nullValues()
                 .each().insertField("processingDate").withValue(System.currentTimeMillis())
                 .renameField("domains").to("oldDomains")
                 .each().select("url").applyFunction(new ExpressionFunction(new Fields("isRelativeUrl"), "url.startsWith(\"http\")", String.class))

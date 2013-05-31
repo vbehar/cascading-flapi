@@ -2,17 +2,17 @@
 package cascading.flapi.pipe.generated.Pipe;
 
 import javax.annotation.Generated;
-import cascading.flapi.pipe.generated.Each.EachBuilder_m12_m13_m14_m15_m16_m17_m18;
+import cascading.flapi.pipe.generated.Each.EachBuilder_m12_m13_m14_m15_m16_m17_m18_m19_m20;
 import cascading.flapi.pipe.generated.Each.EachHelper;
-import cascading.flapi.pipe.generated.Each.ImplEachBuilder_m12_m13_m14_m15_m16_m17_m18;
-import cascading.flapi.pipe.generated.Every.EveryBuilder_m20_m17_m18;
+import cascading.flapi.pipe.generated.Each.ImplEachBuilder_m12_m13_m14_m15_m16_m17_m18_m19_m20;
+import cascading.flapi.pipe.generated.Every.EveryBuilder_m24_m19_m20;
 import cascading.flapi.pipe.generated.Every.EveryHelper;
-import cascading.flapi.pipe.generated.Every.ImplEveryBuilder_m20_m17_m18;
-import cascading.flapi.pipe.generated.GroupBy.GroupByBuilder_m21_m22_m23;
+import cascading.flapi.pipe.generated.Every.ImplEveryBuilder_m24_m19_m20;
+import cascading.flapi.pipe.generated.GroupBy.GroupByBuilder_m25_m26_m27;
 import cascading.flapi.pipe.generated.GroupBy.GroupByHelper;
-import cascading.flapi.pipe.generated.GroupBy.ImplGroupByBuilder_m21_m22_m23;
-import cascading.flapi.pipe.generated.RenameField.ImplRenameFieldBuilder_m24;
-import cascading.flapi.pipe.generated.RenameField.RenameFieldBuilder_m24;
+import cascading.flapi.pipe.generated.GroupBy.ImplGroupByBuilder_m25_m26_m27;
+import cascading.flapi.pipe.generated.RenameField.ImplRenameFieldBuilder_m28;
+import cascading.flapi.pipe.generated.RenameField.RenameFieldBuilder_m28;
 import cascading.flapi.pipe.generated.RenameField.RenameFieldHelper;
 import cascading.pipe.Pipe;
 import unquietcode.tools.flapi.support.BuilderImplementation;
@@ -27,10 +27,10 @@ import unquietcode.tools.flapi.support.ObjectWrapper;
  * Visit https://github.com/UnquietCode/Flapi for more information.
  * 
  * 
- * Generated on May 23, 2013 14:21:13 CEST using version 0.3
+ * Generated on May 30, 2013 18:39:44 CEST using version 0.3
  * 
  */
-@Generated(value = "unquietcode.tools.flapi", date = "May 23, 2013 14:21:13 CEST", comments = "generated using Flapi, the fluent API generator for Java")
+@Generated(value = "unquietcode.tools.flapi", date = "May 30, 2013 18:39:44 CEST", comments = "generated using Flapi, the fluent API generator for Java")
 public class ImplPipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11
     implements PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11, BuilderImplementation
 {
@@ -83,10 +83,10 @@ public class ImplPipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11
      * Start a new Each operation
      * 
      */
-    public EachBuilder_m12_m13_m14_m15_m16_m17_m18 each() {
+    public EachBuilder_m12_m13_m14_m15_m16_m17_m18_m19_m20 each() {
         ObjectWrapper<EachHelper> helper1 = new ObjectWrapper<EachHelper>();
         _helper.each(helper1);
-        ImplEachBuilder_m12_m13_m14_m15_m16_m17_m18 step1 = new ImplEachBuilder_m12_m13_m14_m15_m16_m17_m18(helper1 .get(), this);
+        ImplEachBuilder_m12_m13_m14_m15_m16_m17_m18_m19_m20 step1 = new ImplEachBuilder_m12_m13_m14_m15_m16_m17_m18_m19_m20(helper1 .get(), this);
          
         return step1;
     }
@@ -95,10 +95,10 @@ public class ImplPipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11
      * Start a new Every operation
      * 
      */
-    public EveryBuilder_m20_m17_m18 every() {
+    public EveryBuilder_m24_m19_m20 every() {
         ObjectWrapper<EveryHelper> helper1 = new ObjectWrapper<EveryHelper>();
         _helper.every(helper1);
-        ImplEveryBuilder_m20_m17_m18 step1 = new ImplEveryBuilder_m20_m17_m18(helper1 .get(), this);
+        ImplEveryBuilder_m24_m19_m20 step1 = new ImplEveryBuilder_m24_m19_m20(helper1 .get(), this);
          
         return step1;
     }
@@ -107,10 +107,10 @@ public class ImplPipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11
      * Start a new GroupBy
      * 
      */
-    public GroupByBuilder_m21_m22_m23 groupBy() {
+    public GroupByBuilder_m25_m26_m27 groupBy() {
         ObjectWrapper<GroupByHelper> helper1 = new ObjectWrapper<GroupByHelper>();
         _helper.groupBy(helper1);
-        ImplGroupByBuilder_m21_m22_m23 step1 = new ImplGroupByBuilder_m21_m22_m23(helper1 .get(), this);
+        ImplGroupByBuilder_m25_m26_m27 step1 = new ImplGroupByBuilder_m25_m26_m27(helper1 .get(), this);
          
         return step1;
     }
@@ -135,10 +135,10 @@ public class ImplPipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11
      * Rename the given field
      * 
      */
-    public RenameFieldBuilder_m24 renameField(String field) {
+    public RenameFieldBuilder_m28 renameField(String field) {
         ObjectWrapper<RenameFieldHelper> helper1 = new ObjectWrapper<RenameFieldHelper>();
         _helper.renameField(field, helper1);
-        ImplRenameFieldBuilder_m24 step1 = new ImplRenameFieldBuilder_m24(helper1 .get(), this);
+        ImplRenameFieldBuilder_m28 step1 = new ImplRenameFieldBuilder_m28(helper1 .get(), this);
          
         return step1;
     }
@@ -167,8 +167,8 @@ public class ImplPipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11
      * Set the name of the pipe. Can be called many times, to rename the pipe mid-way down.
      * 
      */
-    public PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 withName(String name) {
-        _helper.withName(name);
+    public PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11 withName(String pipeName) {
+        _helper.withName(pipeName);
          
         return this;
     }

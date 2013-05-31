@@ -2,9 +2,8 @@
 package cascading.flapi.pipe.generated.Each;
 
 import javax.annotation.Generated;
-import cascading.flapi.pipe.generated.Filter.FilterHelper;
-import cascading.flapi.pipe.generated.InsertField.InsertFieldHelper;
-import unquietcode.tools.flapi.support.ObjectWrapper;
+import cascading.flapi.pipe.generated.Filter.FilterBuilder_m21_m22;
+import cascading.flapi.pipe.generated.InsertField.InsertFieldBuilder_m23;
 
 
 /**
@@ -19,61 +18,61 @@ import unquietcode.tools.flapi.support.ObjectWrapper;
  * 
  */
 @Generated(value = "unquietcode.tools.flapi", date = "May 30, 2013 18:39:44 CEST", comments = "generated using Flapi, the fluent API generator for Java")
-public interface EachHelper {
+public interface EachBuilder_m12_m13_m14_m15_m16_m17_m18_m19_m20 <_ReturnType >{
 
 
     /**
      * Allow the function applied to this operation to override some fields given as the input.
      * 
      */
-    void allowOverride();
+    EachBuilder_m13_m14_m15_m16_m17_m18_m19_m20 <_ReturnType> allowOverride();
 
     /**
      * Apply the given cascading Function
      * 
      */
-    void applyFunction(Object function);
+    _ReturnType applyFunction(Object function);
 
     /**
      * Start a new FilterIn (= keep) Operation
      * 
      */
-    void filterIn(ObjectWrapper<FilterHelper> _helper1);
+    FilterBuilder_m21_m22 <_ReturnType> filterIn();
 
     /**
      * Filter in (= keep) only the tuples matching the given cascading Filter
      * 
      */
-    void filterIn(Object filter);
+    _ReturnType filterIn(Object filter);
 
     /**
      * Start a new FilterOut Operation
      * 
      */
-    void filterOut(ObjectWrapper<FilterHelper> _helper1);
+    FilterBuilder_m21_m22 <_ReturnType> filterOut();
 
     /**
      * Filter out the tuples matching the given cascading Filter
      * 
      */
-    void filterOut(Object filter);
+    _ReturnType filterOut(Object filter);
 
     /**
      * Shortcut to apply the Insert cascading Function : insert the given field in each tuple.
      * 
      */
-    void insertField(String field, ObjectWrapper<InsertFieldHelper> _helper1);
+    InsertFieldBuilder_m23 <_ReturnType> insertField(String field);
 
     /**
      * Restrict the fields to be used as the 'output selection' for this operation
      * 
      */
-    void produce(Comparable... output);
+    EachBuilder_m12_m13_m14_m15_m16_m17_m18_m20 <_ReturnType> produce(Comparable... output);
 
     /**
      * Restrict the fields to be used as the 'argument selector' for this operation
      * 
      */
-    void select(Comparable... arguments);
+    EachBuilder_m12_m13_m14_m15_m16_m17_m18_m19 <_ReturnType> select(Comparable... arguments);
 
 }

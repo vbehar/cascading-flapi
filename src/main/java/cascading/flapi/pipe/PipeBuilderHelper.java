@@ -27,17 +27,17 @@ class PipeBuilderHelper implements PipeHelper {
     }
 
     @Override
-    public void from(Object pipe) {
-        if (!Pipe.class.isInstance(pipe)) {
-            throw new IllegalArgumentException(pipe.getClass().getName() + " is not a cascading Pipe !");
+    public void from(Object initialPipe) {
+        if (!Pipe.class.isInstance(initialPipe)) {
+            throw new IllegalArgumentException(initialPipe.getClass().getName() + " is not a cascading Pipe !");
         }
 
-        pipeWrapper.set((Pipe) pipe);
+        pipeWrapper.set((Pipe) initialPipe);
     }
 
     @Override
-    public void withName(String name) {
-        pipeWrapper.set(new Pipe(name, pipeWrapper.get()));
+    public void withName(String pipeName) {
+        pipeWrapper.set(new Pipe(pipeName, pipeWrapper.get()));
     }
 
     @Override

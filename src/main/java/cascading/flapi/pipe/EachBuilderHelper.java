@@ -1,7 +1,9 @@
 package cascading.flapi.pipe;
 
 import unquietcode.tools.flapi.support.ObjectWrapper;
+import cascading.flapi.pipe.FilterBuilderHelper.FilterType;
 import cascading.flapi.pipe.generated.Each.EachHelper;
+import cascading.flapi.pipe.generated.Filter.FilterHelper;
 import cascading.flapi.pipe.generated.InsertField.InsertFieldHelper;
 import cascading.operation.Filter;
 import cascading.operation.Function;
@@ -60,6 +62,16 @@ class EachBuilderHelper extends OperationBuilderHelper implements EachHelper {
     @Override
     public void insertField(String field, ObjectWrapper<InsertFieldHelper> insertFieldHelperWrapper) {
         insertFieldHelperWrapper.set(new InsertFieldBuilderHelper(this, field));
+    }
+
+    @Override
+    public void filterIn(ObjectWrapper<FilterHelper> filterHelperWrapper) {
+        filterHelperWrapper.set(new FilterBuilderHelper(this, FilterType.IN));
+    }
+
+    @Override
+    public void filterOut(ObjectWrapper<FilterHelper> filterHelperWrapper) {
+        filterHelperWrapper.set(new FilterBuilderHelper(this, FilterType.OUT));
     }
 
 }

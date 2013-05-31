@@ -16,25 +16,25 @@ import javax.annotation.Generated;
  * 
  */
 @Generated(value = "unquietcode.tools.flapi", date = "May 30, 2013 18:39:44 CEST", comments = "generated using Flapi, the fluent API generator for Java")
-public interface EveryHelper {
+public interface EveryBuilder_m24_m19_m20 <_ReturnType >{
 
 
     /**
      * Apply the given cascading Aggregator or Buffer
      * 
      */
-    void aggregate(Object aggregator);
+    _ReturnType aggregate(Object aggregator);
 
     /**
      * Restrict the fields to be used as the 'output selection' for this operation
      * 
      */
-    void produce(Comparable... output);
+    EveryBuilder_m24_m20 <_ReturnType> produce(Comparable... output);
 
     /**
      * Restrict the fields to be used as the 'argument selector' for this operation
      * 
      */
-    void select(Comparable... arguments);
+    EveryBuilder_m24_m19 <_ReturnType> select(Comparable... arguments);
 
 }

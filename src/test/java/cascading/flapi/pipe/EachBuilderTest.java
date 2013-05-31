@@ -83,6 +83,19 @@ public class EachBuilderTest {
     }
 
     @Test
+    public void singleEachFilterOut() throws Exception {
+        FilterNull filterNull = new FilterNull();
+        Pipe pipe = PipeBuilder.start()
+                .each().filterOut(filterNull)
+                .pipe();
+        
+        Each each = (Each) pipe;
+        assertThat(each.isFilter()).isTrue();
+        assertThat(each.getFilter()).isInstanceOf(FilterNull.class);
+        assertThat(each.getFilter()).isEqualTo(filterNull);
+    }
+
+    @Test
     public void singleEachFilterIn() throws Exception {
         FilterNull filterNull = new FilterNull();
         Pipe pipe = PipeBuilder.start()

@@ -1,0 +1,107 @@
+
+/* project definition */
+
+description = 'Fluent API for Cascading, generated with Flapi'
+group = 'cascading-flapi'
+version = '1.0-SNAPSHOT'
+
+defaultTasks 'build'
+
+/* Java project */
+
+apply plugin: 'java'
+apply plugin: 'maven'
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+/* Handle Java code generation by Flapi */
+
+sourceSets {
+  generator // the generator main class is in src/generator/java
+}
+
+// generate the java code after the compilation of the generator
+compileGeneratorJava.doLast {
+  file("$buildDir/generated-src").mkdirs()
+  javaexec {
+    classpath = sourceSets.generator.runtimeClasspath
+    main = 'cascading.flapi.pipe.PipeBuilderGenerator'
+    args = ["$buildDir/generated-src"] // outputDir
+  }
+}
+
+task compileGeneratedSrcJava (type: JavaCompile, dependsOn: 'compileGeneratorJava') {
+  description = "Compile the generated Java sources files"
+  classpath = sourceSets.generator.runtimeClasspath
+  source = "$buildDir/generated-src"
+  destinationDir = file("$buildDir/classes/generated-src")
+}
+task generateApi (dependsOn: 'compileGeneratedSrcJava') // alias
+
+compileJava.dependsOn generateApi
+
+/* Testing */
+
+test { 
+  testLogging.exceptionFormat "full"
+}
+
+/* Packaging */
+
+jar {
+  from "$buildDir/classes/generated-src" // also include generated classes
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+  description = "Package a jar of the Java sources"
+  classifier = 'sources'
+  from sourceSets.main.allSource + files("$buildDir/generated-src")
+}
+
+artifacts {
+  archives jar, sourcesJar
+}
+
+/* Dependencies */
+
+// simulate the "provided" dependency scope of maven
+configurations {
+  provided
+}
+sourceSets {
+  main.compileClasspath += configurations.provided
+  test.compileClasspath += configurations.provided
+  test.runtimeClasspath += configurations.provided
+}
+task mappings {
+  conf2ScopeMappings.addMapping(0, configurations.provided, Conf2ScopeMappingContainer.PROVIDED)
+}
+
+dependencies {
+  provided 'cascading:cascading-core:2.1.6'
+  compile files("$buildDir/classes/generated-src") {
+    builtBy 'compileGeneratedSrcJava'
+  }
+
+  generatorCompile 'cascading:cascading-core:2.1.6'
+  generatorCompile 'unquietcode.tools.flapi:flapi:0.3'
+
+  testCompile 'junit:junit:4.11'
+  testCompile 'org.assertj:assertj-core:1.2.0'
+  testCompile 'org.slf4j:slf4j-api:1.7.5'
+}
+
+repositories {
+  mavenCentral()
+  mavenRepo name: 'unquietcode', url: 'http://www.unquietcode.com/maven/releases' // for flapi
+  mavenRepo name: 'conjars', url: 'http://conjars.org/repo/' // for cascading
+}
+
+/* IDE */
+
+apply plugin: 'eclipse'
+eclipse {
+  classpath.plusConfigurations += [configurations.provided, configurations.generatorCompile]
+}
+

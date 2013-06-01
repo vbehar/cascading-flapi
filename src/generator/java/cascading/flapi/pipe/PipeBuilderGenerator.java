@@ -186,8 +186,7 @@ public class PipeBuilderGenerator {
                 .build();
 
         // descriptor.writeToFolder("/path/to/cascading-flapi/src/main/java");
-        descriptor.writeToFolder("/data/vbehar/projects/cascading-flapi/src/main/java");
-        //descriptor.writeToFolder(args[0]);
+        descriptor.writeToFolder(args[0]);
     }
 
 }

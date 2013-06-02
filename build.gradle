@@ -26,6 +26,7 @@ defaultTasks 'build'
 
 apply plugin: 'java'
 apply plugin: 'maven'
+apply from: 'gradle/maven.gradle'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -85,9 +86,10 @@ signing.sign configurations.archives
 uploadArchives {
   repositories.mavenDeployer {
     beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-    repository(url: "http://conjars.org/repo/") {
+    repository(url: "file:///tmp/repo/")
+    /*repository(url: "http://conjars.org/repo/") {
       authentication(userName: "$conjarsUsername", password: "$conjarsPassword")
-    }
+    }*/
     pom.project {
       name project.name
       description project.description
@@ -96,6 +98,10 @@ uploadArchives {
       url 'https://github.com/vbehar/cascading-flapi'
       scm {
         url 'https://github.com/vbehar/cascading-flapi.git'
+      }
+      ciManagement {
+        system 'Jenkins'
+        url 'https://buildhive.cloudbees.com/job/vbehar/job/cascading-flapi/'
       }
       issueManagement {
         system 'GitHub'
@@ -114,19 +120,6 @@ uploadArchives {
 task publish (dependsOn: 'uploadArchives') // alias
 
 /* Dependencies */
-
-// simulate the "provided" dependency scope of maven
-configurations {
-  provided
-}
-sourceSets {
-  main.compileClasspath += configurations.provided
-  test.compileClasspath += configurations.provided
-  test.runtimeClasspath += configurations.provided
-}
-task mappings {
-  conf2ScopeMappings.addMapping(0, configurations.provided, Conf2ScopeMappingContainer.PROVIDED)
-}
 
 dependencies {
   provided 'cascading:cascading-core:2.1.6'

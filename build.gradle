@@ -18,7 +18,6 @@
 
 description = 'Fluent API for Cascading, generated with Flapi'
 group = 'cascading-flapi'
-version = '0.1-SNAPSHOT'
 
 defaultTasks 'build'
 
@@ -120,6 +119,25 @@ uploadArchives {
   }
 }
 task publish (dependsOn: 'uploadArchives') // alias
+
+/* Release */
+
+buildscript {
+  dependencies {
+    classpath 'com.github.townsfolk:gradle-release:1.2'
+  }
+  repositories {
+    mavenCentral()
+    mavenRepo name: 'sonatype', url: 'https://oss.sonatype.org/content/groups/public'
+  }
+}
+apply plugin: 'release'
+release {
+  preTagCommitMessage = '[Gradle Release Plugin] - release '
+  tagCommitMessage = '[Gradle Release Plugin] - tag '
+  newVersionCommitMessage = '[Gradle Release Plugin] - new version commit: '
+}
+createReleaseTag.dependsOn publish
 
 /* Dependencies */
 

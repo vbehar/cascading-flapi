@@ -130,6 +130,7 @@ task mappings {
 
 dependencies {
   provided 'cascading:cascading-core:2.1.6'
+  provided 'org.slf4j:slf4j-api:1.7.5'
   compile files("$buildDir/classes/generated-src") {
     builtBy 'compileGeneratedSrcJava'
   }
@@ -139,7 +140,7 @@ dependencies {
 
   testCompile 'junit:junit:4.11'
   testCompile 'org.assertj:assertj-core:1.2.0'
-  testCompile 'org.slf4j:slf4j-api:1.7.5'
+  testCompile 'org.slf4j:slf4j-simple:1.7.5'
 }
 
 repositories {

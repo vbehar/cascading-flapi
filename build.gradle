@@ -82,7 +82,10 @@ artifacts {
 /* Publishing */
 
 apply plugin: 'signing'
-signing.sign configurations.archives
+signing {
+  required { gradle.taskGraph.hasTask('uploadArchives') } // only sign when publishing
+  sign configurations.archives
+}
 uploadArchives {
   repositories.mavenDeployer {
     beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }

@@ -4,6 +4,8 @@ The goal of this project is to provide a fluent API for [Cascading](http://www.c
 
 [![Build Status](https://buildhive.cloudbees.com/job/vbehar/job/cascading-flapi/badge/icon)](https://buildhive.cloudbees.com/job/vbehar/job/cascading-flapi/)
 
+**Status** : WORK IN PROGRESS ! The current API is not complete and not stable !
+
 ## Usage
 
 Fluent API for building a Cascading Pipe :

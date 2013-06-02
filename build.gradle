@@ -105,3 +105,11 @@ eclipse {
   classpath.plusConfigurations += [configurations.provided, configurations.generatorCompile]
 }
 
+apply plugin: 'idea'
+idea {
+  module {
+    scopes.COMPILE.plus += configurations.generatorCompile
+    scopes.PROVIDED.plus += configurations.provided
+  }
+}
+

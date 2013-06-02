@@ -1,7 +1,18 @@
+# Gradle
+.gradle
+build
+
+# Maven
+target
+
+# Eclipse
 .project
 .classpath
 .settings
-.gradle
 bin
-build
-target
+
+# IntelliJ IDEA
+cascading-flapi.iml
+cascading-flapi.ipr
+cascading-flapi.iws
+out

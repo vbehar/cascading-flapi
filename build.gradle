@@ -78,10 +78,13 @@ artifacts {
   archives jar, sourcesJar
 }
 
-/* Uploading */
+/* Publishing */
 
+apply plugin: 'signing'
+signing.sign configurations.archives
 uploadArchives {
   repositories.mavenDeployer {
+    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
     repository(url: "http://conjars.org/repo/") {
       authentication(userName: "$conjarsUsername", password: "$conjarsPassword")
     }
@@ -108,6 +111,7 @@ uploadArchives {
     }
   }
 }
+task publish (dependsOn: 'uploadArchives') // alias
 
 /* Dependencies */
 

@@ -78,6 +78,37 @@ artifacts {
   archives jar, sourcesJar
 }
 
+/* Uploading */
+
+uploadArchives {
+  repositories.mavenDeployer {
+    repository(url: "http://conjars.org/repo/") {
+      authentication(userName: "$conjarsUsername", password: "$conjarsPassword")
+    }
+    pom.project {
+      name project.name
+      description project.description
+      inceptionYear '2013'
+      packaging 'jar'
+      url 'https://github.com/vbehar/cascading-flapi'
+      scm {
+        url 'https://github.com/vbehar/cascading-flapi.git'
+      }
+      issueManagement {
+        system 'GitHub'
+        url 'https://github.com/vbehar/cascading-flapi/issues'
+      }
+      licenses {
+        license {
+          name 'The Apache Software License, Version 2.0'
+          url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          distribution 'repo'
+        }
+      }
+    }
+  }
+}
+
 /* Dependencies */
 
 // simulate the "provided" dependency scope of maven

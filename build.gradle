@@ -83,7 +83,7 @@ artifacts {
 
 apply plugin: 'signing'
 signing {
-  required { gradle.taskGraph.hasTask('uploadArchives') } // only sign when publishing
+  required { gradle.taskGraph.hasTask(uploadArchives) } // only sign when publishing
   sign configurations.archives
 }
 uploadArchives {

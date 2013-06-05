@@ -154,6 +154,7 @@ public class PipeBuilderTest {
                 .each().insertField("processingDate").withValue(System.currentTimeMillis())
                 .renameField("domains").to("oldDomains")
                 .each().select("url").applyFunction(new ExpressionFunction(new Fields("isRelativeUrl"), "url.startsWith(\"http\")", String.class))
+                .compressOutput().forThisStepOnly().withGzipCodec().withType("BLOCK").ofTheMappers()
                 .discard("data")
                 .groupBy().withSortOnFields("url").onFields("domain")
                 .count("domains")

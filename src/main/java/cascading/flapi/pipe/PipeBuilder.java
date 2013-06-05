@@ -15,8 +15,8 @@
  */
 package cascading.flapi.pipe;
 
-import cascading.flapi.pipe.generated.Pipe.PipeBuilder_m1_m2_m3_m4_m5_m6_m7_m8_m9_m10_m11;
-import cascading.flapi.pipe.generated.Pipe.PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11;
+import cascading.flapi.pipe.generated.Pipe.PipeBuilder_m1_m2_m3_m4_m5_m6_m7_m8_m9_m10_m11_m12_m13_m14;
+import cascading.flapi.pipe.generated.Pipe.PipeBuilder_m1_m2_m3_m4_m5_m7_m8_m9_m10_m11_m12_m13_m14;
 import cascading.flapi.pipe.generated.Pipe.PipeGenerator;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
@@ -29,7 +29,7 @@ public class PipeBuilder {
     /**
      * Starts a new instance of PipeBuilder
      */
-    public static PipeBuilder_m1_m2_m3_m4_m5_m6_m7_m8_m9_m10_m11<Void> start() {
+    public static PipeBuilder_m1_m2_m3_m4_m5_m6_m7_m8_m9_m10_m11_m12_m13_m14<Void> start() {
         return PipeGenerator.start(new PipeBuilderHelper());
     }
 
@@ -39,7 +39,7 @@ public class PipeBuilder {
      * @param pipeName
      *            of the initial Pipe
      */
-    public static PipeBuilder_m1_m2_m3_m4_m5_m6_m7_m8_m9_m10_m11<Void> start(String pipeName) {
+    public static PipeBuilder_m1_m2_m3_m4_m5_m6_m7_m8_m9_m10_m11_m12_m13_m14<Void> start(String pipeName) {
         return PipeGenerator.start(new PipeBuilderHelper()).withName(pipeName);
     }
 
@@ -49,7 +49,7 @@ public class PipeBuilder {
      * @param initialPipe
      *            to start from
      */
-    public static PipeBuilder_m1_m2_m3_m4_m6_m7_m8_m9_m10_m11<Void> from(Pipe initialPipe) {
+    public static PipeBuilder_m1_m2_m3_m4_m5_m7_m8_m9_m10_m11_m12_m13_m14<Void> from(Pipe initialPipe) {
         return PipeGenerator.start(new PipeBuilderHelper()).from(initialPipe);
     }
 

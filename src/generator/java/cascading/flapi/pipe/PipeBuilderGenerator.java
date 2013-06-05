@@ -23,6 +23,10 @@ import cascading.pipe.Pipe;
  * The PipeBuilder generator : use flapi to generate the java code.
  */
 public class PipeBuilderGenerator {
+    
+    public static final transient int GROUP_CONFIG_PROPERTY_MODE = 1;
+    
+    public static final transient int GROUP_COMPRESSION_CODEC = 2;
 
     public static void main(String[] args) {
         Descriptor descriptor = Flapi.builder()
@@ -141,6 +145,14 @@ public class PipeBuilderGenerator {
                 .startBlock("GroupBy", "groupBy()")
                     .withDocumentation("Start a new GroupBy")
                 .any()
+                
+                    .addBlockReference("ConfigProperty", "setStepConfigProperty(String key)")
+                        .withDocumentation("Set a Step ConfigDef property")
+                    .any()
+                    
+                    .addMethod("onReducers(int numberOfReducers)")
+                        .withDocumentation("Configure the number of reducer tasks used for this GroupBy")
+                    .atMost(1)
                      
                     .addMethod("reversed()")
                         .withDocumentation("Reverse the GroupBy")
@@ -197,6 +209,87 @@ public class PipeBuilderGenerator {
                 .addMethod("count(String fieldDeclaration)")
                     .withDocumentation("Count all the values and store the result as a long in the given fieldDeclaration.")
                 .any()
+
+                /*
+                 * Config
+                 */
+                 
+                .startBlock("ConfigProperty", "setConfigProperty(String key)")
+                    .withDocumentation("Set a ConfigDef property")
+                .any()
+
+                    .addMethod("inMode(Object mode)")
+                        .withDocumentation("Using the given ConfigDef.Mode value")
+                    .atMost(1, GROUP_CONFIG_PROPERTY_MODE)
+
+                    .addMethod("inDefaultMode()")
+                        .withDocumentation("A DEFAULT property is only applied if there is no existing value in the property set.")
+                    .atMost(1, GROUP_CONFIG_PROPERTY_MODE)
+
+                    .addMethod("inReplaceMode()")
+                        .withDocumentation("A REPLACE property is always applied overriding any previous values.")
+                    .atMost(1, GROUP_CONFIG_PROPERTY_MODE)
+
+                    .addMethod("inUpdateMode()")
+                        .withDocumentation("An UPDATE property is always applied to an existing property. " +
+                        		"Usually when the property key represent a list of values.")
+                    .atMost(1, GROUP_CONFIG_PROPERTY_MODE)
+
+                    .addMethod("withValue(String value)")
+                        .withDocumentation("The value to associate with the property")
+                    .last()
+
+                .endBlock()
+                
+                .addBlockReference("ConfigProperty", "setStepConfigProperty(String key)")
+                    .withDocumentation("Set a Step ConfigDef property")
+                .any()
+
+                /*
+                 * Compression
+                 */
+                 
+                .startBlock("Compression", "compressOutput()")
+                    .withDocumentation("Compress the output")
+                .any()
+
+                    .addMethod("forThisStepOnly()")
+                        .withDocumentation("Restrict the scope of the compression to the current step only")
+                    .atMost(1)
+
+                    .addMethod("withType(String compressionType)")
+                        .withDocumentation("Use the given compression type (eg for SequenceFiles : NONE, RECORD, BLOCK)")
+                    .atMost(1)
+
+                    .addMethod("withCodecClass(String fullCodecClassName)")
+                        .withDocumentation("Use the compression codec identified by the given class name")
+                    .atMost(1, GROUP_COMPRESSION_CODEC)
+
+                    .addMethod("withDefaultCodec()")
+                        .withDocumentation("Use the default compression codec")
+                    .atMost(1, GROUP_COMPRESSION_CODEC)
+
+                    .addMethod("withGzipCodec()")
+                        .withDocumentation("Use the Gzip compression codec")
+                    .atMost(1, GROUP_COMPRESSION_CODEC)
+
+                    .addMethod("withBZip2Codec()")
+                        .withDocumentation("Use the BZip2 compression codec")
+                    .atMost(1, GROUP_COMPRESSION_CODEC)
+
+                    .addMethod("withSnappyCodec()")
+                        .withDocumentation("Use the Snappy compression codec")
+                    .atMost(1, GROUP_COMPRESSION_CODEC)
+
+                    .addMethod("ofTheMappers()")
+                        .withDocumentation("Compress the output of the Mappers (in SequenceFiles)")
+                    .last()
+
+                    .addMethod("ofTheJob()")
+                        .withDocumentation("Compress the output of a MapReduce job")
+                    .last()
+
+                .endBlock()
 
                 .build();
 

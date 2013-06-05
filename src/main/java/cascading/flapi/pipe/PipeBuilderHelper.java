@@ -16,6 +16,9 @@
 package cascading.flapi.pipe;
 
 import unquietcode.tools.flapi.support.ObjectWrapper;
+import cascading.flapi.pipe.ConfigPropertyBuilderHelper.ConfigScope;
+import cascading.flapi.pipe.generated.Compression.CompressionHelper;
+import cascading.flapi.pipe.generated.ConfigProperty.ConfigPropertyHelper;
 import cascading.flapi.pipe.generated.Each.EachHelper;
 import cascading.flapi.pipe.generated.Every.EveryHelper;
 import cascading.flapi.pipe.generated.GroupBy.GroupByHelper;
@@ -93,6 +96,21 @@ class PipeBuilderHelper implements PipeHelper {
     @Override
     public void count(String fieldDeclaration) {
         new EveryBuilderHelper(pipeWrapper).aggregate(new Count(new Fields(fieldDeclaration)));
+    }
+
+    @Override
+    public void setConfigProperty(String key, ObjectWrapper<ConfigPropertyHelper> configPropertyHelperWrapper) {
+        configPropertyHelperWrapper.set(new ConfigPropertyBuilderHelper(pipeWrapper, ConfigScope.GLOBAL, key));
+    }
+
+    @Override
+    public void setStepConfigProperty(String key, ObjectWrapper<ConfigPropertyHelper> configPropertyHelperWrapper) {
+        configPropertyHelperWrapper.set(new ConfigPropertyBuilderHelper(pipeWrapper, ConfigScope.STEP, key));
+    }
+
+    @Override
+    public void compressOutput(ObjectWrapper<CompressionHelper> compressionHelperWrapper) {
+        compressionHelperWrapper.set(new CompressionBuilderHelper(pipeWrapper));
     }
 
 }

@@ -16,6 +16,8 @@
 package cascading.flapi.pipe;
 
 import unquietcode.tools.flapi.support.ObjectWrapper;
+import cascading.flapi.pipe.ConfigPropertyBuilderHelper.ConfigScope;
+import cascading.flapi.pipe.generated.ConfigProperty.ConfigPropertyHelper;
 import cascading.flapi.pipe.generated.GroupBy.GroupByHelper;
 import cascading.pipe.GroupBy;
 import cascading.pipe.Pipe;
@@ -30,10 +32,22 @@ class GroupByBuilderHelper implements GroupByHelper {
 
     private boolean reverseOrder = false;
 
-    private Fields sortFields = null;
+    private Fields sortFields;
+
+    private int numberOfReducers = -1;
 
     public GroupByBuilderHelper(ObjectWrapper<Pipe> pipeWrapper) {
         this.pipeWrapper = pipeWrapper;
+    }
+
+    @Override
+    public void setStepConfigProperty(String key, ObjectWrapper<ConfigPropertyHelper> configPropertyHelperWrapper) {
+        configPropertyHelperWrapper.set(new ConfigPropertyBuilderHelper(pipeWrapper, ConfigScope.STEP, key));
+    }
+
+    @Override
+    public void onReducers(int numberOfReducers) {
+        this.numberOfReducers = numberOfReducers;
     }
 
     @Override
@@ -51,6 +65,9 @@ class GroupByBuilderHelper implements GroupByHelper {
     @Override
     public void onFields(@SuppressWarnings("rawtypes") Comparable... fields) {
         pipeWrapper.set(new GroupBy(pipeWrapper.get(), PipeBuilder.getSelector(fields), sortFields, reverseOrder));
+        if (numberOfReducers > 0) {
+            pipeWrapper.get().getStepConfigDef().setProperty("mapred.reduce.tasks", String.valueOf(numberOfReducers));
+        }
     }
 
 }

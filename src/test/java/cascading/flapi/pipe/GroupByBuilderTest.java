@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
+import cascading.flapi.pipe.TestHelper.NullGetter;
 import cascading.pipe.GroupBy;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
@@ -66,6 +67,18 @@ public class GroupByBuilderTest {
             .hasSize(1)
             .containsKey(pipe.getName())
             .containsValue(new Fields("data"));
+    }
+
+    @Test
+    public void singleGroupByOnReducers() throws Exception {
+        Pipe pipe = PipeBuilder.start()
+                .groupBy().onReducers(16).onFields("url")
+                .pipe();
+        
+        assertThat(pipe.getStepConfigDef().isEmpty()).isFalse();
+        assertThat(pipe.getStepConfigDef().getAllKeys()).contains("mapred.reduce.tasks");
+        
+        assertThat(pipe.getStepConfigDef().apply("mapred.reduce.tasks", new NullGetter())).isEqualTo("16");
     }
 
 }

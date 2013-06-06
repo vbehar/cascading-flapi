@@ -58,6 +58,36 @@ public class PipeBuilderGenerator {
                 .any()
                 
                 /*
+                 * CoGroup
+                 */
+                 
+                .startBlock("CoGroup", "coGroup()")
+                    .withDocumentation("Start a new CoGroup")
+                .any()
+                
+                    .addBlockReference("ConfigProperty", "setStepConfigProperty(String key)")
+                        .withDocumentation("Set a Step ConfigDef property")
+                    .any()
+                    
+                    .addMethod("onReducers(int numberOfReducers)")
+                        .withDocumentation("Configure the number of reducer tasks used for this CoGroup")
+                    .atMost(1)
+                    
+                    .addMethod("from(Object... pipes)")
+                        .withDocumentation("Join the given pipes")
+                    .atLeast(1)
+                    
+                    .addMethod("onFields(String... fields)")
+                        .withDocumentation("Join on the given fields")
+                    .atLeast(1)
+                     
+                    .addMethod("applyInnerJoin()")
+                        .withDocumentation("Apply an inner join")
+                    .last()
+                 
+                .endBlock()
+                
+                /*
                  * Each
                  */
                 

@@ -81,4 +81,18 @@ public class GroupByBuilderTest {
         assertThat(pipe.getStepConfigDef().apply("mapred.reduce.tasks", new NullGetter())).isEqualTo("16");
     }
 
+    @Test
+    public void singleGroupByWithCustomProperty() throws Exception {
+        Pipe pipe = PipeBuilder.start()
+                .groupBy()
+                    .setStepConfigProperty("mapred.reduce.tasks").withValue("16")
+                    .onFields("url")
+                .pipe();
+        
+        assertThat(pipe.getStepConfigDef().isEmpty()).isFalse();
+        assertThat(pipe.getStepConfigDef().getAllKeys()).contains("mapred.reduce.tasks");
+        
+        assertThat(pipe.getStepConfigDef().apply("mapred.reduce.tasks", new NullGetter())).isEqualTo("16");
+    }
+
 }

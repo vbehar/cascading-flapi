@@ -20,28 +20,30 @@ import java.util.List;
 
 import unquietcode.tools.flapi.support.ObjectWrapper;
 import cascading.flapi.pipe.ConfigPropertyBuilderHelper.ConfigScope;
+import cascading.flapi.pipe.generated.CoGroup.CoGroupHelper;
 import cascading.flapi.pipe.generated.ConfigProperty.ConfigPropertyHelper;
-import cascading.flapi.pipe.generated.GroupBy.GroupByHelper;
-import cascading.pipe.GroupBy;
+import cascading.pipe.CoGroup;
 import cascading.pipe.Pipe;
+import cascading.pipe.assembly.Rename;
+import cascading.pipe.joiner.InnerJoin;
 import cascading.tuple.Fields;
 
 /**
- * The {@link GroupByHelper} implementation for the {@link GroupBy} of our PipeBuilder.
+ * The {@link CoGroupHelper} implementation for the {@link CoGroup} of our PipeBuilder.
  */
-class GroupByBuilderHelper implements GroupByHelper {
+class CoGroupBuilderHelper implements CoGroupHelper {
 
     private final ObjectWrapper<Pipe> pipeWrapper;
 
     private List<ObjectWrapper<PipeWrapperCallback>> callbacks;
 
-    private boolean reverseOrder = false;
+    private Pipe[] pipes;
 
-    private Fields sortFields;
+    private String[] groupFields;
 
     private int numberOfReducers = -1;
 
-    public GroupByBuilderHelper(ObjectWrapper<Pipe> pipeWrapper) {
+    public CoGroupBuilderHelper(ObjectWrapper<Pipe> pipeWrapper) {
         this.pipeWrapper = pipeWrapper;
     }
 
@@ -58,35 +60,47 @@ class GroupByBuilderHelper implements GroupByHelper {
     }
 
     @Override
+    public void from(Object... pipes) {
+        if (Pipe[].class.isInstance(pipes)) {
+            this.pipes = (Pipe[]) pipes;
+        }
+    }
+
+    @Override
+    public void onFields(String... fields) {
+        this.groupFields = fields;
+    }
+
+    @Override
     public void onReducers(int numberOfReducers) {
         this.numberOfReducers = numberOfReducers;
     }
 
     @Override
-    public void reversed() {
-        reverseOrder = true;
-    }
+    public void applyInnerJoin() {
+        Fields[] groupFieldsPerPipe = new Fields[pipes.length];
 
-    @Override
-    public void withSortOnFields(@SuppressWarnings("rawtypes") Comparable... sortFields) {
-        if (sortFields != null && sortFields.length > 0) {
-            this.sortFields = PipeBuilder.getSelector(sortFields);
+        for (int pipeId = 0; pipeId < pipes.length; pipeId++) {
+            if (pipeId == 0) {
+                groupFieldsPerPipe[0] = new Fields(groupFields);
+            } else {
+                for (int groupFieldId = 0; groupFieldId < groupFields.length; groupFieldId++) {
+                    String groupField = groupFields[groupFieldId];
+                    String modifiedGroupField = "__rhs" + String.valueOf(pipeId) + "__" + groupField;
+                    pipes[pipeId] = new Rename(pipes[pipeId], new Fields(groupField), new Fields(modifiedGroupField));
+                    groupFields[groupFieldId] = modifiedGroupField;
+                }
+                groupFieldsPerPipe[pipeId] = new Fields(groupFields);
+            }
         }
-    }
 
-    /*
-     * Last method - apply the operation
-     */
-    @Override
-    public void onFields(@SuppressWarnings("rawtypes") Comparable... fields) {
-        // apply
-        pipeWrapper.set(new GroupBy(pipeWrapper.get(), PipeBuilder.getSelector(fields), sortFields, reverseOrder));
+        pipeWrapper.set(new CoGroup(pipes, groupFieldsPerPipe, null, new InnerJoin()));
+        // TODO discard modified fields
 
         // Optionally set the number of reducers
         if (numberOfReducers > 0) {
             pipeWrapper.get().getStepConfigDef().setProperty("mapred.reduce.tasks", String.valueOf(numberOfReducers));
         }
-
         // Optionally execute the callbacks AFTER the groupBy
         if (callbacks != null) {
             for (ObjectWrapper<PipeWrapperCallback> callback : callbacks) {

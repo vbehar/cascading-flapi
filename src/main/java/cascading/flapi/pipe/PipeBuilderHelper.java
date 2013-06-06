@@ -17,6 +17,7 @@ package cascading.flapi.pipe;
 
 import unquietcode.tools.flapi.support.ObjectWrapper;
 import cascading.flapi.pipe.ConfigPropertyBuilderHelper.ConfigScope;
+import cascading.flapi.pipe.generated.CoGroup.CoGroupHelper;
 import cascading.flapi.pipe.generated.Compression.CompressionHelper;
 import cascading.flapi.pipe.generated.ConfigProperty.ConfigPropertyHelper;
 import cascading.flapi.pipe.generated.Each.EachHelper;
@@ -56,6 +57,11 @@ class PipeBuilderHelper implements PipeHelper {
     @Override
     public void withName(String pipeName) {
         pipeWrapper.set(new Pipe(pipeName, pipeWrapper.get()));
+    }
+
+    @Override
+    public void coGroup(ObjectWrapper<CoGroupHelper> coGroupHelperWrapper) {
+        coGroupHelperWrapper.set(new CoGroupBuilderHelper(pipeWrapper));
     }
 
     @Override
@@ -100,12 +106,12 @@ class PipeBuilderHelper implements PipeHelper {
 
     @Override
     public void setConfigProperty(String key, ObjectWrapper<ConfigPropertyHelper> configPropertyHelperWrapper) {
-        configPropertyHelperWrapper.set(new ConfigPropertyBuilderHelper(pipeWrapper, ConfigScope.GLOBAL, key));
+        configPropertyHelperWrapper.set(new ConfigPropertyBuilderHelper().withPipeWrapper(pipeWrapper).withScope(ConfigScope.GLOBAL).withKey(key));
     }
 
     @Override
     public void setStepConfigProperty(String key, ObjectWrapper<ConfigPropertyHelper> configPropertyHelperWrapper) {
-        configPropertyHelperWrapper.set(new ConfigPropertyBuilderHelper(pipeWrapper, ConfigScope.STEP, key));
+        configPropertyHelperWrapper.set(new ConfigPropertyBuilderHelper().withPipeWrapper(pipeWrapper).withScope(ConfigScope.STEP).withKey(key));
     }
 
     @Override

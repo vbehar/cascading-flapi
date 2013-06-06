@@ -30,7 +30,9 @@ class ConfigPropertyBuilderHelper implements ConfigPropertyHelper {
         GLOBAL, STEP
     }
 
-    private final ObjectWrapper<Pipe> pipeWrapper;
+    private ObjectWrapper<Pipe> pipeWrapper;
+
+    private ObjectWrapper<PipeWrapperCallback> pipeCallback;
 
     private ConfigScope scope;
 
@@ -38,10 +40,24 @@ class ConfigPropertyBuilderHelper implements ConfigPropertyHelper {
 
     private Mode mode;
 
-    public ConfigPropertyBuilderHelper(ObjectWrapper<Pipe> pipeWrapper, ConfigScope scope, String key) {
+    public ConfigPropertyBuilderHelper withPipeWrapper(ObjectWrapper<Pipe> pipeWrapper) {
         this.pipeWrapper = pipeWrapper;
+        return this;
+    }
+
+    public ConfigPropertyBuilderHelper withPipeCallback(ObjectWrapper<PipeWrapperCallback> pipeCallback) {
+        this.pipeCallback = pipeCallback;
+        return this;
+    }
+
+    public ConfigPropertyBuilderHelper withScope(ConfigScope scope) {
         this.scope = scope;
+        return this;
+    }
+
+    public ConfigPropertyBuilderHelper withKey(String key) {
         this.key = key;
+        return this;
     }
 
     @Override
@@ -72,7 +88,21 @@ class ConfigPropertyBuilderHelper implements ConfigPropertyHelper {
     }
 
     @Override
-    public void withValue(String value) {
+    public void withValue(final String value) {
+        if (pipeCallback != null) {
+            pipeCallback.set(new PipeWrapperCallback() {
+
+                @Override
+                public void call(ObjectWrapper<Pipe> pipeWrapper) {
+                    apply(value, pipeWrapper);
+                }
+            });
+        } else {
+            apply(value, pipeWrapper);
+        }
+    }
+
+    private void apply(String value, ObjectWrapper<Pipe> pipeWrapper) {
         ConfigDef configDef = null;
         switch (scope) {
         case GLOBAL:

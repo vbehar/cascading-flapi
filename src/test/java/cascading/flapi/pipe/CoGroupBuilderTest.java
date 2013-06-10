@@ -41,8 +41,7 @@ public class CoGroupBuilderTest {
         CoGroup coGroup = (CoGroup) pipe;
         assertThat(coGroup.getJoiner()).isInstanceOf(InnerJoin.class);
         assertThat(coGroup.getHeads()).hasSize(2);
-        assertThat(coGroup.getHeads()[0].getName()).isEqualTo("one");
-        assertThat(coGroup.getHeads()[1].getName()).isEqualTo("two");
+        assertThat(coGroup.getHeads()).extracting("name").contains("one", "two");
         assertThat(coGroup.getDeclaredFields()).isNull();
     }
 

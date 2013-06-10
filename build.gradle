@@ -67,15 +67,25 @@ test {
 jar {
   from "$buildDir/classes/generated-src" // also include generated classes
 }
+javadoc {
+  source = sourceSets.main.allJava + files("$buildDir/generated-src")
+  excludes = ["unquietcode"]
+  classpath += configurations.provided
+}
 
 task sourcesJar(type: Jar, dependsOn: classes) {
   description = "Package a jar of the Java sources"
   classifier = 'sources'
   from sourceSets.main.allSource + files("$buildDir/generated-src")
 }
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  description = "Package a jar of the javadoc"
+  classifier = 'javadoc'
+  from javadoc.destinationDir
+}
 
 artifacts {
-  archives jar, sourcesJar
+  archives jar, sourcesJar, javadocJar
 }
 
 /* Publishing */

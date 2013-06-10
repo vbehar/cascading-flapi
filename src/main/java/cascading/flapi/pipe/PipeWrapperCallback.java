@@ -19,12 +19,17 @@ import unquietcode.tools.flapi.support.ObjectWrapper;
 import cascading.pipe.Pipe;
 
 /**
+ * Define a callback to be executed on a Pipe instance.
  * 
+ * Used to defer an operation until we can get a hold on a specific Pipe instance.
  */
 interface PipeWrapperCallback {
 
     /**
+     * Execute this callback on the given pipe instance
+     * 
      * @param pipeWrapper
+     *            holding a Pipe instance
      */
     void call(ObjectWrapper<Pipe> pipeWrapper);
 

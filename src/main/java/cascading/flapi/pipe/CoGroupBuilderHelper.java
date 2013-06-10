@@ -15,9 +15,6 @@
  */
 package cascading.flapi.pipe;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import unquietcode.tools.flapi.support.ObjectWrapper;
 import cascading.flapi.pipe.ConfigPropertyBuilderHelper.ConfigScope;
 import cascading.flapi.pipe.generated.CoGroup.CoGroupHelper;
@@ -35,7 +32,7 @@ class CoGroupBuilderHelper implements CoGroupHelper {
 
     private final ObjectWrapper<Pipe> pipeWrapper;
 
-    private List<ObjectWrapper<PipeWrapperCallback>> callbacks;
+    private final PipeWrapperCallbacksSupport callbacksSupport;
 
     private Pipe[] pipes;
 
@@ -45,18 +42,15 @@ class CoGroupBuilderHelper implements CoGroupHelper {
 
     public CoGroupBuilderHelper(ObjectWrapper<Pipe> pipeWrapper) {
         this.pipeWrapper = pipeWrapper;
+        callbacksSupport = new PipeWrapperCallbacksSupport();
     }
 
     @Override
     public void setStepConfigProperty(String key, ObjectWrapper<ConfigPropertyHelper> configPropertyHelperWrapper) {
-        if (callbacks == null) {
-            callbacks = new ArrayList<ObjectWrapper<PipeWrapperCallback>>();
-        }
-
-        ObjectWrapper<PipeWrapperCallback> callback = new ObjectWrapper<PipeWrapperCallback>();
-        callbacks.add(callback);
-
-        configPropertyHelperWrapper.set(new ConfigPropertyBuilderHelper().withPipeCallback(callback).withScope(ConfigScope.STEP).withKey(key));
+        configPropertyHelperWrapper.set(new ConfigPropertyBuilderHelper()
+            .withPipeCallback(callbacksSupport.newPipeWrapperCallbackWrapper())
+            .withScope(ConfigScope.STEP)
+            .withKey(key));
     }
 
     @Override
@@ -102,13 +96,7 @@ class CoGroupBuilderHelper implements CoGroupHelper {
             pipeWrapper.get().getStepConfigDef().setProperty("mapred.reduce.tasks", String.valueOf(numberOfReducers));
         }
         // Optionally execute the callbacks AFTER the groupBy
-        if (callbacks != null) {
-            for (ObjectWrapper<PipeWrapperCallback> callback : callbacks) {
-                if (callback.get() != null) {
-                    callback.get().call(pipeWrapper);
-                }
-            }
-        }
+        callbacksSupport.applyToAllCallbacks(pipeWrapper);
     }
 
 }

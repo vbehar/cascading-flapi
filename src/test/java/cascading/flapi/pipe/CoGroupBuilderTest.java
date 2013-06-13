@@ -45,4 +45,36 @@ public class CoGroupBuilderTest {
         assertThat(coGroup.getDeclaredFields()).isNull();
     }
 
+    @Test
+    public void complexCoGroup() throws Exception {
+        Pipe one = PipeBuilder.start("one")
+                .each().insertField("root").withValue("root value")
+                .each().insertField("pattern").withValue("pattern value")
+                .each().insertField("field1").withValue("value")
+                .pipe();
+
+        Pipe two = PipeBuilder.start("two")
+                .each().insertField("root").withValue("root value")
+                .each().insertField("pattern").withValue("pattern value")
+                .each().insertField("field2").withValue("value")
+                .pipe();
+
+        Pipe three = PipeBuilder.start("three")
+                .each().insertField("root").withValue("root value")
+                .each().insertField("pattern").withValue("pattern value")
+                .each().insertField("field3").withValue("value")
+                .pipe();
+        
+        Pipe merged = PipeBuilder.coGroup(one, two, three)
+                .onFields("root", "pattern").applyInnerJoin()
+                .pipe();
+        
+        assertThat(merged).isInstanceOf(CoGroup.class);
+        
+        CoGroup coGroup = (CoGroup) merged;
+        assertThat(coGroup.getJoiner()).isInstanceOf(InnerJoin.class);
+        assertThat(coGroup.getHeads()).hasSize(3);
+        assertThat(coGroup.getDeclaredFields()).isNull();
+    }
+
 }

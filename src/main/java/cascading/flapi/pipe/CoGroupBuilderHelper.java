@@ -78,13 +78,14 @@ class CoGroupBuilderHelper implements CoGroupHelper {
             if (pipeId == 0) {
                 groupFieldsPerPipe[0] = new Fields(groupFields);
             } else {
+                String[] modifiedGroupFields = new String[groupFields.length];
                 for (int groupFieldId = 0; groupFieldId < groupFields.length; groupFieldId++) {
                     String groupField = groupFields[groupFieldId];
                     String modifiedGroupField = "__rhs" + String.valueOf(pipeId) + "__" + groupField;
                     pipes[pipeId] = new Rename(pipes[pipeId], new Fields(groupField), new Fields(modifiedGroupField));
-                    groupFields[groupFieldId] = modifiedGroupField;
+                    modifiedGroupFields[groupFieldId] = modifiedGroupField;
                 }
-                groupFieldsPerPipe[pipeId] = new Fields(groupFields);
+                groupFieldsPerPipe[pipeId] = new Fields(modifiedGroupFields);
             }
         }
 

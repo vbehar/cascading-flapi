@@ -17,11 +17,15 @@ package cascading.flapi.pipe;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
 import org.junit.Test;
 
-import cascading.pipe.CoGroup;
+import cascading.flapi.pipe.TestHelper.EqualsFilter;
 import cascading.pipe.Pipe;
-import cascading.pipe.joiner.InnerJoin;
+import cascading.tuple.Fields;
+import cascading.tuple.Tuple;
+
 
 /**
  * Tests for all the CoGroup-related operations
@@ -29,52 +33,105 @@ import cascading.pipe.joiner.InnerJoin;
 public class CoGroupBuilderTest {
 
     @Test
-    public void simpleCoGroup() throws Exception {
-        Pipe pipe = PipeBuilder
-                .coGroup(new Pipe("one"), new Pipe("two"))
-                    .onFields("url")
-                    .applyInnerJoin()
+    public void innerJoin() throws Exception {
+        Pipe startPipe = PipeBuilder.start("start")
+                .retain("root", "pattern")
                 .pipe();
-        
-        assertThat(pipe).isInstanceOf(CoGroup.class);
-        
-        CoGroup coGroup = (CoGroup) pipe;
-        assertThat(coGroup.getJoiner()).isInstanceOf(InnerJoin.class);
-        assertThat(coGroup.getHeads()).hasSize(2);
-        assertThat(coGroup.getHeads()).extracting("name").contains("one", "two");
-        assertThat(coGroup.getDeclaredFields()).isNull();
-    }
-
-    @Test
-    public void complexCoGroup() throws Exception {
-        Pipe one = PipeBuilder.start("one")
-                .each().insertField("root").withValue("root value")
-                .each().insertField("pattern").withValue("pattern value")
-                .each().insertField("field1").withValue("value")
+        Pipe one = PipeBuilder.from(startPipe).withName("one")
+                .each().insertField("field1").withValue("fieldValue1")
                 .pipe();
 
-        Pipe two = PipeBuilder.start("two")
-                .each().insertField("root").withValue("root value")
-                .each().insertField("pattern").withValue("pattern value")
-                .each().insertField("field2").withValue("value")
+        Pipe two = PipeBuilder.from(startPipe).withName("two")
+                .each().insertField("field2").withValue("fieldValue2")
                 .pipe();
 
-        Pipe three = PipeBuilder.start("three")
-                .each().insertField("root").withValue("root value")
-                .each().insertField("pattern").withValue("pattern value")
-                .each().insertField("field3").withValue("value")
+        Pipe three = PipeBuilder.from(startPipe).withName("three")
+                .each().insertField("field3").withValue("fieldValue3")
+                .each().select("pattern").filterOut(EqualsFilter.value("patternValue2"))
                 .pipe();
         
         Pipe merged = PipeBuilder.coGroup(one, two, three)
                 .onFields("root", "pattern").applyInnerJoin()
                 .pipe();
         
-        assertThat(merged).isInstanceOf(CoGroup.class);
-        
-        CoGroup coGroup = (CoGroup) merged;
-        assertThat(coGroup.getJoiner()).isInstanceOf(InnerJoin.class);
-        assertThat(coGroup.getHeads()).hasSize(3);
-        assertThat(coGroup.getDeclaredFields()).isNull();
+        List<Tuple> tuples = TestHelper.launchFlow(startPipe, merged,
+                                                   new Fields("root", "pattern"),
+                                                   new Tuple("rootValue", "patternValue"),
+                                                   new Tuple("rootValue", "patternValue2"));
+        assertThat(tuples.size()).isEqualTo(1);
+        Tuple tuple = tuples.get(0);
+        assertThat(tuple.getString(0)).isEqualTo("rootValue");
+        assertThat(tuple.getString(1)).isEqualTo("patternValue");
+        assertThat(tuple.getString(2)).isEqualTo("fieldValue1");
+        assertThat(tuple.getString(3)).isEqualTo("fieldValue2");
+        assertThat(tuple.getString(4)).isEqualTo("fieldValue3");
     }
+    
+    @Test
+    public void leftJoin() throws Exception {
+        Pipe startPipe = PipeBuilder.start("start")
+                .retain("root", "pattern")
+                .pipe();
+        Pipe one = PipeBuilder.from(startPipe).withName("one")
+                .each().insertField("field1").withValue("fieldValue1")
+                .pipe();
 
+        Pipe two = PipeBuilder.from(startPipe).withName("two")
+                .each().insertField("field2").withValue("fieldValue2")
+                .pipe();
+
+        Pipe three = PipeBuilder.from(startPipe).withName("three")
+                .each().insertField("field3").withValue("fieldValue3")
+                .each().select("pattern").filterOut(EqualsFilter.value("patternValue2"))
+                .pipe();
+        
+        // merge one, two and three
+        {
+            Pipe merged = PipeBuilder.coGroup(one, two, three)
+                    .onFields("root", "pattern")
+                    .applyLeftJoin()
+                    .pipe();
+        
+            List<Tuple> tuples = TestHelper.launchFlow(startPipe, merged,
+                                                       new Fields("root", "pattern"),
+                                                       new Tuple("rootValue", "patternValue"),
+                                                       new Tuple("rootValue", "patternValue2"));
+            assertThat(tuples.size()).isEqualTo(2);
+            {
+                Tuple tuple = tuples.get(0);
+                assertThat(tuple.getString(0)).isEqualTo("rootValue");
+                assertThat(tuple.getString(1)).isEqualTo("patternValue");
+                assertThat(tuple.getString(2)).isEqualTo("fieldValue1");
+                assertThat(tuple.getString(3)).isEqualTo("fieldValue2");
+                assertThat(tuple.getString(4)).isEqualTo("fieldValue3");
+            }
+            {
+                Tuple tuple = tuples.get(1);
+                assertThat(tuple.getString(0)).isEqualTo("rootValue");
+                assertThat(tuple.getString(1)).isEqualTo("patternValue2");
+                assertThat(tuple.getString(2)).isEqualTo("fieldValue1");
+                assertThat(tuple.getString(3)).isEqualTo("fieldValue2");
+                assertThat(tuple.getString(4)).isNull();
+            }
+        }
+        // merge one, three and two
+        {
+            Pipe merged = PipeBuilder.coGroup(one, three, two)
+                    .onFields("root", "pattern")
+                    .applyLeftJoin()
+                    .pipe();
+        
+            List<Tuple> tuples = TestHelper.launchFlow(startPipe, merged,
+                                                       new Fields("root", "pattern"),
+                                                       new Tuple("rootValue", "patternValue"),
+                                                       new Tuple("rootValue", "patternValue2"));
+            assertThat(tuples.size()).isEqualTo(1);
+            Tuple tuple = tuples.get(0);
+            assertThat(tuple.getString(0)).isEqualTo("rootValue");
+            assertThat(tuple.getString(1)).isEqualTo("patternValue");
+            assertThat(tuple.getString(2)).isEqualTo("fieldValue1");
+            assertThat(tuple.getString(3)).isEqualTo("fieldValue3");
+            assertThat(tuple.getString(4)).isEqualTo("fieldValue2");
+        }
+    }
 }

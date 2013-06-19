@@ -84,6 +84,10 @@ public class PipeBuilderGenerator {
                     .addMethod("applyInnerJoin()")
                         .withDocumentation("Apply an inner join")
                     .last()
+                    
+                    .addMethod("applyLeftJoin()")
+                        .withDocumentation("Apply an left join")
+                    .last()
                  
                 .endBlock()
                 

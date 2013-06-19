@@ -21,8 +21,8 @@ import cascading.flapi.pipe.generated.CoGroup.CoGroupHelper;
 import cascading.flapi.pipe.generated.ConfigProperty.ConfigPropertyHelper;
 import cascading.pipe.CoGroup;
 import cascading.pipe.Pipe;
-import cascading.pipe.assembly.Rename;
 import cascading.pipe.joiner.InnerJoin;
+import cascading.pipe.joiner.LeftJoin;
 import cascading.tuple.Fields;
 
 /**
@@ -36,8 +36,9 @@ class CoGroupBuilderHelper implements CoGroupHelper {
 
     private Pipe[] pipes;
 
-    private String[] groupFields;
-
+    private Fields[] groupFieldsPerPipe;
+    private String[] modifiedGroupFieldsSet;
+    
     private int numberOfReducers = -1;
 
     public CoGroupBuilderHelper(ObjectWrapper<Pipe> pipeWrapper) {
@@ -62,7 +63,21 @@ class CoGroupBuilderHelper implements CoGroupHelper {
 
     @Override
     public void onFields(String... fields) {
-        this.groupFields = fields;
+        groupFieldsPerPipe = new Fields[pipes.length];
+        groupFieldsPerPipe[0] = new Fields(fields);
+        modifiedGroupFieldsSet = new String[(pipes.length-1) * fields.length];
+        int modifiedGroupFieldsId = 0;
+        for (int pipeId = 1; pipeId < pipes.length; pipeId++) {
+            String[] modifiedGroupFields = new String[fields.length];
+            for (int groupFieldId = 0; groupFieldId < fields.length; groupFieldId++) {
+                String groupField = fields[groupFieldId];
+                String modifiedGroupField = "__rhs" + String.valueOf(pipeId) + "__" + groupField;
+                pipes[pipeId] = PipeBuilder.from(pipes[pipeId]).renameField(groupField).to(modifiedGroupField).pipe();
+                modifiedGroupFields[groupFieldId] = modifiedGroupField;
+                modifiedGroupFieldsSet[modifiedGroupFieldsId++] = modifiedGroupField;
+            }
+            groupFieldsPerPipe[pipeId] = new Fields(modifiedGroupFields);
+        }
     }
 
     @Override
@@ -72,26 +87,11 @@ class CoGroupBuilderHelper implements CoGroupHelper {
 
     @Override
     public void applyInnerJoin() {
-        Fields[] groupFieldsPerPipe = new Fields[pipes.length];
-
-        for (int pipeId = 0; pipeId < pipes.length; pipeId++) {
-            if (pipeId == 0) {
-                groupFieldsPerPipe[0] = new Fields(groupFields);
-            } else {
-                String[] modifiedGroupFields = new String[groupFields.length];
-                for (int groupFieldId = 0; groupFieldId < groupFields.length; groupFieldId++) {
-                    String groupField = groupFields[groupFieldId];
-                    String modifiedGroupField = "__rhs" + String.valueOf(pipeId) + "__" + groupField;
-                    pipes[pipeId] = new Rename(pipes[pipeId], new Fields(groupField), new Fields(modifiedGroupField));
-                    modifiedGroupFields[groupFieldId] = modifiedGroupField;
-                }
-                groupFieldsPerPipe[pipeId] = new Fields(modifiedGroupFields);
-            }
-        }
-
         pipeWrapper.set(new CoGroup(pipes, groupFieldsPerPipe, null, new InnerJoin()));
-        // TODO discard modified fields
-
+        
+        // Discard modified group fields (__rhs1__..., __rhs2__)
+        pipeWrapper.set(PipeBuilder.from(pipeWrapper.get()).discard(modifiedGroupFieldsSet).pipe());
+        
         // Optionally set the number of reducers
         if (numberOfReducers > 0) {
             pipeWrapper.get().getStepConfigDef().setProperty("mapred.reduce.tasks", String.valueOf(numberOfReducers));
@@ -100,4 +100,18 @@ class CoGroupBuilderHelper implements CoGroupHelper {
         callbacksSupport.applyToAllCallbacks(pipeWrapper);
     }
 
+    @Override
+    public void applyLeftJoin() {
+        pipeWrapper.set(new CoGroup(pipes, groupFieldsPerPipe, null, new LeftJoin()));
+        
+        // Discard modified group fields (__rhs1__..., __rhs2__)
+        pipeWrapper.set(PipeBuilder.from(pipeWrapper.get()).discard(modifiedGroupFieldsSet).pipe());
+        
+        // Optionally set the number of reducers
+        if (numberOfReducers > 0) {
+            pipeWrapper.get().getStepConfigDef().setProperty("mapred.reduce.tasks", String.valueOf(numberOfReducers));
+        }
+        // Optionally execute the callbacks AFTER the groupBy
+        callbacksSupport.applyToAllCallbacks(pipeWrapper);
+    }
 }

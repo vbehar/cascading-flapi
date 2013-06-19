@@ -159,11 +159,15 @@ dependencies {
   }
 
   generatorCompile 'cascading:cascading-core:2.1.6'
+  generatorCompile 'cascading:cascading-local:2.1.6'
   generatorCompile 'unquietcode.tools.flapi:flapi:0.3'
 
   testCompile 'junit:junit:4.11'
   testCompile 'org.assertj:assertj-core:1.2.0'
   testCompile 'org.slf4j:slf4j-simple:1.7.5'
+  testCompile 'org.apache.commons:commons-io:1.3.2'
+  testCompile 'com.google.guava:guava:14.0.1'
+  testCompile 'cascading:cascading-local:2.1.6'
 }
 
 repositories {

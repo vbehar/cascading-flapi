@@ -159,7 +159,6 @@ dependencies {
   }
 
   generatorCompile 'cascading:cascading-core:2.1.6'
-  generatorCompile 'cascading:cascading-local:2.1.6'
   generatorCompile 'unquietcode.tools.flapi:flapi:0.3'
 
   testCompile 'junit:junit:4.11'

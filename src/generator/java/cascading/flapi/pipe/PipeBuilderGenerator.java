@@ -75,11 +75,11 @@ public class PipeBuilderGenerator {
                     
                     .addMethod("from(Object... pipes)")
                         .withDocumentation("Join the given pipes")
-                    .atLeast(1)
+                    .exactly(1)
                     
                     .addMethod("onFields(String... fields)")
                         .withDocumentation("Join on the given fields")
-                    .atLeast(1)
+                    .exactly(1)
                      
                     .addMethod("applyInnerJoin()")
                         .withDocumentation("Apply an inner join")
@@ -87,6 +87,10 @@ public class PipeBuilderGenerator {
                     
                     .addMethod("applyLeftJoin()")
                         .withDocumentation("Apply an left join")
+                    .last()
+                    
+                    .addMethod("applyOuterJoin()")
+                        .withDocumentation("Apply an outer join")
                     .last()
                  
                 .endBlock()

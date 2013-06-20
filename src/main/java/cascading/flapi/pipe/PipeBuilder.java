@@ -15,7 +15,7 @@
  */
 package cascading.flapi.pipe;
 
-import cascading.flapi.pipe.generated.CoGroup.CoGroupBuilder_m16_m17_m18_m19_m20_m13;
+import cascading.flapi.pipe.generated.CoGroup.CoGroupBuilder_m16_m17_m18_m20_m21_m13;
 import cascading.flapi.pipe.generated.Pipe.PipeBuilder_m1_m2_m3_m4_m5_m6_m7_m8_m9_m10_m11_m12_m13_m14_m15;
 import cascading.flapi.pipe.generated.Pipe.PipeBuilder_m1_m2_m3_m4_m5_m6_m8_m9_m10_m11_m12_m13_m14_m15;
 import cascading.flapi.pipe.generated.Pipe.PipeGenerator;
@@ -60,7 +60,7 @@ public class PipeBuilder {
      * @param pipes
      *            to join
      */
-    public static CoGroupBuilder_m16_m17_m18_m19_m20_m13<PipeBuilder_m1_m2_m3_m4_m5_m6_m7_m8_m9_m10_m11_m12_m13_m14_m15<Void>> coGroup(Pipe... pipes) {
+    public static CoGroupBuilder_m16_m17_m18_m20_m21_m13<PipeBuilder_m1_m2_m3_m4_m5_m6_m7_m8_m9_m10_m11_m12_m13_m14_m15<Void>> coGroup(Pipe... pipes) {
         return PipeGenerator.start(new PipeBuilderHelper()).coGroup().from((Object[]) pipes);
     }
 

@@ -21,11 +21,11 @@ import java.util.List;
 
 import org.junit.Test;
 
+
 import cascading.flapi.pipe.TestHelper.EqualsFilter;
 import cascading.pipe.Pipe;
 import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
-
 
 /**
  * Tests for all the CoGroup-related operations
@@ -134,4 +134,140 @@ public class CoGroupBuilderTest {
             assertThat(tuple.getString(4)).isEqualTo("fieldValue2");
         }
     }
+    
+    @Test
+    public void simpleOuterJoin() throws Exception {
+        Pipe startPipe = PipeBuilder.start("start")
+                .retain("groupField")
+                .pipe();
+        Pipe one = PipeBuilder.from(startPipe).withName("one")
+                .each().select("groupField").filterOut(EqualsFilter.value("groupValue3"))
+                .each().insertField("field1").withValue("fieldValue1")
+                .pipe();
+
+        Pipe two = PipeBuilder.from(startPipe).withName("two")
+                .each().select("groupField").filterOut(EqualsFilter.value("groupValue2"))
+                .each().select("groupField").filterOut().nullValues()
+                .each().insertField("field2").withValue("fieldValue2")
+                .pipe();
+        
+        Pipe merged = PipeBuilder.coGroup(one, two)
+                .onFields("groupField").applyOuterJoin()
+                .pipe();
+        
+        List<Tuple> tuples = TestHelper.launchFlow(startPipe, merged,
+                                                   new Fields("groupField"),
+                                                   new Tuple("groupValue"),
+                                                   new Tuple("groupValue2"),
+                                                   new Tuple("groupValue3"),
+                                                   Tuple.size(1));
+        assertThat(tuples.size()).isEqualTo(4);
+        {
+            Tuple tuple = tuples.get(0);
+            assertThat(tuple.size()).isEqualTo(3);
+            assertThat(tuple.getString(0)).isEqualTo("fieldValue1");
+            assertThat(tuple.getString(1)).isNull();
+            assertThat(tuple.getString(2)).isNull();
+        }
+        {
+            Tuple tuple = tuples.get(1);
+            assertThat(tuple.size()).isEqualTo(3);
+            assertThat(tuple.getString(0)).isEqualTo("fieldValue1");
+            assertThat(tuple.getString(1)).isEqualTo("fieldValue2");
+            assertThat(tuple.getString(2)).isEqualTo("groupValue");
+        }
+        {
+            Tuple tuple = tuples.get(2);
+            assertThat(tuple.size()).isEqualTo(3);
+            assertThat(tuple.getString(0)).isEqualTo("fieldValue1");
+            assertThat(tuple.getString(1)).isNull();
+            assertThat(tuple.getString(2)).isEqualTo("groupValue2");
+        }
+        {
+            Tuple tuple = tuples.get(3);
+            assertThat(tuple.size()).isEqualTo(3);
+            assertThat(tuple.getString(0)).isNull();
+            assertThat(tuple.getString(1)).isEqualTo("fieldValue2");
+            assertThat(tuple.getString(2)).isEqualTo("groupValue3");
+        }
+    }
+    
+    @Test
+    public void outerJoinWith3Pipes() throws Exception {
+        Pipe startPipe = PipeBuilder.start("start")
+                .retain("groupField")
+                .pipe();
+        Pipe one = PipeBuilder.from(startPipe).withName("one")
+                .each().select("groupField").filterOut(EqualsFilter.value("groupValue3"))
+                .each().select("groupField").filterOut(EqualsFilter.value("groupValue4"))
+                .each().insertField("field1").withValue("fieldValue1")
+                .pipe();
+
+        Pipe two = PipeBuilder.from(startPipe).withName("two")
+                .each().select("groupField").filterOut(EqualsFilter.value("groupValue2"))
+                .each().select("groupField").filterOut(EqualsFilter.value("groupValue4"))
+                .each().select("groupField").filterOut().nullValues()
+                .each().insertField("field2").withValue("fieldValue2")
+                .pipe();
+        
+        Pipe three = PipeBuilder.from(startPipe).withName("three")
+                .each().select("groupField").filterOut(EqualsFilter.value("groupValue1"))
+                .each().select("groupField").filterOut(EqualsFilter.value("groupValue2"))
+                .each().insertField("field3").withValue("fieldValue3")
+                .pipe();
+        
+        Pipe merged = PipeBuilder.coGroup(one, two, three)
+                .onFields("groupField").applyOuterJoin()
+                .pipe();
+        
+        List<Tuple> tuples = TestHelper.launchFlow(startPipe, merged,
+                                                   new Fields("groupField"),
+                                                   new Tuple("groupValue1"),
+                                                   new Tuple("groupValue2"),
+                                                   new Tuple("groupValue3"),
+                                                   new Tuple("groupValue4"),
+                                                   Tuple.size(1));
+        assertThat(tuples.size()).isEqualTo(5);
+        {
+            Tuple tuple = tuples.get(0);
+            assertThat(tuple.size()).isEqualTo(4);
+            assertThat(tuple.getString(0)).isEqualTo("fieldValue1");
+            assertThat(tuple.getString(1)).isNull();
+            assertThat(tuple.getString(2)).isEqualTo("fieldValue3");
+            assertThat(tuple.getString(3)).isNull();
+        }
+        {
+            Tuple tuple = tuples.get(1);
+            assertThat(tuple.size()).isEqualTo(4);
+            assertThat(tuple.getString(0)).isEqualTo("fieldValue1");
+            assertThat(tuple.getString(1)).isEqualTo("fieldValue2");
+            assertThat(tuple.getString(2)).isNull();
+            assertThat(tuple.getString(3)).isEqualTo("groupValue1");
+        }
+        {
+            Tuple tuple = tuples.get(2);
+            assertThat(tuple.size()).isEqualTo(4);
+            assertThat(tuple.getString(0)).isEqualTo("fieldValue1");
+            assertThat(tuple.getString(1)).isNull();
+            assertThat(tuple.getString(2)).isNull();
+            assertThat(tuple.getString(3)).isEqualTo("groupValue2");
+        }
+        {
+            Tuple tuple = tuples.get(3);
+            assertThat(tuple.size()).isEqualTo(4);
+            assertThat(tuple.getString(0)).isNull();
+            assertThat(tuple.getString(1)).isEqualTo("fieldValue2");
+            assertThat(tuple.getString(2)).isEqualTo("fieldValue3");
+            assertThat(tuple.getString(3)).isEqualTo("groupValue3");
+        }
+        {
+            Tuple tuple = tuples.get(4);
+            assertThat(tuple.size()).isEqualTo(4);
+            assertThat(tuple.getString(0)).isNull();
+            assertThat(tuple.getString(1)).isNull();
+            assertThat(tuple.getString(2)).isEqualTo("fieldValue3");
+            assertThat(tuple.getString(3)).isEqualTo("groupValue4");
+        }
+    }
+    
 }

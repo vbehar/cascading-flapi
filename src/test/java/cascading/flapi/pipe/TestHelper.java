@@ -88,9 +88,10 @@ class TestHelper {
                 if(inputFields.size() != tuple.size()) {
                     throw new IllegalArgumentException("Number of input fields is not the same of value of input tuple");
                 }
-                writer.write(tuple.getString(0));
+                writer.write((tuple.getString(0) == null)? "" : tuple.getString(0));
                 for(int i=1; i<tuple.size(); i++) {
-                    writer.write("\t" + tuple.getString(i));
+                    writer.write("\t");
+                    writer.write((tuple.getString(i) == null)? "" : tuple.getString(i));
                 }
                 writer.write("\n");
             }

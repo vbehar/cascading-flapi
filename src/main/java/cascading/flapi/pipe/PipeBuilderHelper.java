@@ -38,7 +38,7 @@ import cascading.tuple.Fields;
 class PipeBuilderHelper implements PipeHelper {
 
     /** The Pipe wrapper, so that other helpers can update its value */
-    private final ObjectWrapper<Pipe> pipeWrapper = new ObjectWrapper<Pipe>(new Pipe("start"));
+    private final ObjectWrapper<Pipe> pipeWrapper = new ObjectWrapper<Pipe>();
 
     @Override
     public Pipe pipe() {

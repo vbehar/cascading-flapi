@@ -78,42 +78,86 @@ class TestHelper {
         }
     }
     
-    static List<Tuple> launchFlow(Pipe sourcePipe, Pipe tailPipe, Fields inputFields, Tuple... inputTuples) throws IOException {
-        File tmpDir = Files.createTempDir();
-        try {
-            File input = new File(tmpDir, "input.csv");
-            File output = new File(tmpDir, "output.csv");
-            FileWriter writer = new FileWriter(input);
-            for(Tuple tuple : inputTuples) {
-                if(inputFields.size() != tuple.size()) {
-                    throw new IllegalArgumentException("Number of input fields is not the same of value of input tuple");
+    static class FlowHelper {
+        private final Source[] sources;
+        private Pipe tail;
+        
+        private FlowHelper(Source... sources) {
+            this.sources = sources;
+        }
+        static FlowHelper from(Source... sources) {
+            return new FlowHelper(sources); 
+        }
+        
+        FlowHelper withOutput(Pipe tail) {
+            this.tail = tail;
+            return this;
+        }
+        
+        List<Tuple> launchFlow() throws IOException {
+            File tmpDir = Files.createTempDir();
+            try {
+                FlowDef flowDef = FlowDef.flowDef().setName("testFlow");
+                for(int sourceId=0; sourceId<sources.length; sourceId++) {
+                    Source source = sources[sourceId];
+                    File input = new File(tmpDir, "input"+sourceId+".csv");
+                    FileWriter writer = new FileWriter(input);
+                    for(Tuple tuple : source.tuples) {
+                        if(source.fields.size() != tuple.size()) {
+                            throw new IllegalArgumentException("Number of input fields is not the same of value of input tuple");
+                        }
+                        writer.write((tuple.getString(0) == null)? "" : tuple.getString(0));
+                        for(int i=1; i<tuple.size(); i++) {
+                            writer.write("\t");
+                            writer.write((tuple.getString(i) == null)? "" : tuple.getString(i));
+                        }
+                        writer.write("\n");
+                    }
+                    writer.flush();
+                    writer.close();
+                    FileTap inputTap = new FileTap(new TextDelimited(source.fields), input.getAbsolutePath());
+                    flowDef.addSource(source.pipe, inputTap);
                 }
-                writer.write((tuple.getString(0) == null)? "" : tuple.getString(0));
-                for(int i=1; i<tuple.size(); i++) {
-                    writer.write("\t");
-                    writer.write((tuple.getString(i) == null)? "" : tuple.getString(i));
+                File output = new File(tmpDir, "output.csv");
+                FileTap outputTap = new FileTap(new TextDelimited(true, "\t"), output.getAbsolutePath());
+                flowDef.addTailSink(tail, outputTap);
+                Flow<?> flow = new LocalFlowConnector(new Properties()).connect(flowDef);
+                flow.complete();
+                
+                List<Tuple> result = new ArrayList<Tuple>();
+                TupleEntryIterator iterator = flow.openSink();
+                while(iterator.hasNext()) {
+                    result.add(iterator.next().getTupleCopy());
                 }
-                writer.write("\n");
+                iterator.close();
+                return result;
+            } finally {
+                FileUtils.deleteDirectory(tmpDir);
             }
-            writer.flush();
-            writer.close();
-            FileTap inputTap = new FileTap(new TextDelimited(inputFields), input.getAbsolutePath());
-            FileTap outputTap = new FileTap(new TextDelimited(true, "\t"), output.getAbsolutePath());
-            FlowDef flowDef = FlowDef.flowDef().setName("testFlow")
-                    .addSource(sourcePipe, inputTap)
-                    .addTailSink(tailPipe, outputTap);
-            Flow<?> flow = new LocalFlowConnector(new Properties()).connect(flowDef);
-            flow.complete();
+        }
+        
+        static class Source {
+            private final Pipe pipe;
+            private Fields fields;
+            private Tuple[] tuples;
             
-            List<Tuple> result = new ArrayList<Tuple>();
-            TupleEntryIterator iterator = flow.openSink();
-            while(iterator.hasNext()) {
-                result.add(iterator.next().getTupleCopy());
+            private Source(Pipe pipe) {
+                this.pipe = pipe;
             }
-            iterator.close();
-            return result;
-        } finally {
-            FileUtils.deleteDirectory(tmpDir);
+            
+            static Source from(Pipe pipe) {
+                return new Source(pipe);
+            }
+            
+            Source withFields(String... fields) {
+                this.fields = new Fields(fields);
+                return this;
+            }
+            
+            Source withTuples(Tuple... tuples) {
+                this.tuples = tuples;
+                return this;
+            }
         }
     }
 

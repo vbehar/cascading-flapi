@@ -21,10 +21,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-
-import cascading.flapi.pipe.TestHelper.EqualsFilter;
+import cascading.flapi.pipe.TestHelper.FlowHelper.Source;
 import cascading.pipe.Pipe;
-import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
 
 /**
@@ -34,32 +32,28 @@ public class CoGroupBuilderTest {
 
     @Test
     public void innerJoin() throws Exception {
-        Pipe startPipe = PipeBuilder.start("start")
-                .retain("root", "pattern")
-                .pipe();
-        Pipe one = PipeBuilder.from(startPipe).withName("one")
-                .each().insertField("field1").withValue("fieldValue1")
-                .pipe();
-
-        Pipe two = PipeBuilder.from(startPipe).withName("two")
-                .each().insertField("field2").withValue("fieldValue2")
-                .pipe();
-
-        Pipe three = PipeBuilder.from(startPipe).withName("three")
-                .each().insertField("field3").withValue("fieldValue3")
-                .each().select("pattern").filterOut(EqualsFilter.value("patternValue2"))
-                .pipe();
+        Pipe one = PipeBuilder.start("one").pipe();
+        Pipe two = PipeBuilder.start("two").pipe();
+        Pipe three = PipeBuilder.start("three").pipe();
         
         Pipe merged = PipeBuilder.coGroup(one, two, three)
                 .onFields("root", "pattern").applyInnerJoin()
                 .pipe();
         
-        List<Tuple> tuples = TestHelper.launchFlow(startPipe, merged,
-                                                   new Fields("root", "pattern"),
-                                                   new Tuple("rootValue", "patternValue"),
-                                                   new Tuple("rootValue", "patternValue2"));
+        
+        List<Tuple> tuples = TestHelper.FlowHelper.from(Source.from(one).withFields("root", "pattern", "field1")
+                                                                        .withTuples(new Tuple("rootValue", "patternValue", "fieldValue1"),
+                                                                                    new Tuple("rootValue", "patternValue2", "fieldValue1")),
+                                                        Source.from(two).withFields("root", "pattern", "field2")
+                                                                        .withTuples(new Tuple("rootValue", "patternValue", "fieldValue2"),
+                                                                                    new Tuple("rootValue", "patternValue2", "fieldValue2")),
+                                                        Source.from(three).withFields("root", "pattern", "field3")
+                                                                          .withTuples(new Tuple("rootValue", "patternValue", "fieldValue3")))
+                                                   .withOutput(merged)
+                                                   .launchFlow();
         assertThat(tuples.size()).isEqualTo(1);
         Tuple tuple = tuples.get(0);
+        System.out.println(tuple);
         assertThat(tuple.getString(0)).isEqualTo("rootValue");
         assertThat(tuple.getString(1)).isEqualTo("patternValue");
         assertThat(tuple.getString(2)).isEqualTo("fieldValue1");
@@ -69,33 +63,26 @@ public class CoGroupBuilderTest {
     
     @Test
     public void leftJoin() throws Exception {
-        Pipe startPipe = PipeBuilder.start("start")
-                .retain("root", "pattern")
-                .pipe();
-        Pipe one = PipeBuilder.from(startPipe).withName("one")
-                .each().insertField("field1").withValue("fieldValue1")
-                .pipe();
-
-        Pipe two = PipeBuilder.from(startPipe).withName("two")
-                .each().insertField("field2").withValue("fieldValue2")
-                .pipe();
-
-        Pipe three = PipeBuilder.from(startPipe).withName("three")
-                .each().insertField("field3").withValue("fieldValue3")
-                .each().select("pattern").filterOut(EqualsFilter.value("patternValue2"))
-                .pipe();
+        Pipe one = PipeBuilder.start("one").pipe();
+        Pipe two = PipeBuilder.start("two").pipe();
+        Pipe three = PipeBuilder.start("three").pipe();
         
         // merge one, two and three
         {
             Pipe merged = PipeBuilder.coGroup(one, two, three)
-                    .onFields("root", "pattern")
-                    .applyLeftJoin()
+                    .onFields("root", "pattern").applyLeftJoin()
                     .pipe();
         
-            List<Tuple> tuples = TestHelper.launchFlow(startPipe, merged,
-                                                       new Fields("root", "pattern"),
-                                                       new Tuple("rootValue", "patternValue"),
-                                                       new Tuple("rootValue", "patternValue2"));
+            List<Tuple> tuples = TestHelper.FlowHelper.from(Source.from(one).withFields("root", "pattern", "field1")
+                                                                            .withTuples(new Tuple("rootValue", "patternValue", "fieldValue1"),
+                                                                                        new Tuple("rootValue", "patternValue2", "fieldValue1")),
+                                                            Source.from(two).withFields("root", "pattern", "field2")
+                                                                            .withTuples(new Tuple("rootValue", "patternValue", "fieldValue2"),
+                                                                                        new Tuple("rootValue", "patternValue2", "fieldValue2")),
+                                                            Source.from(three).withFields("root", "pattern", "field3")
+                                                                              .withTuples(new Tuple("rootValue", "patternValue", "fieldValue3")))
+                                                      .withOutput(merged)
+                                                      .launchFlow();
             assertThat(tuples.size()).isEqualTo(2);
             {
                 Tuple tuple = tuples.get(0);
@@ -121,10 +108,16 @@ public class CoGroupBuilderTest {
                     .applyLeftJoin()
                     .pipe();
         
-            List<Tuple> tuples = TestHelper.launchFlow(startPipe, merged,
-                                                       new Fields("root", "pattern"),
-                                                       new Tuple("rootValue", "patternValue"),
-                                                       new Tuple("rootValue", "patternValue2"));
+            List<Tuple> tuples = TestHelper.FlowHelper.from(Source.from(one).withFields("root", "pattern", "field1")
+                                                                            .withTuples(new Tuple("rootValue", "patternValue", "fieldValue1"),
+                                                                                        new Tuple("rootValue", "patternValue2", "fieldValue1")),
+                                                            Source.from(two).withFields("root", "pattern", "field2")
+                                                                            .withTuples(new Tuple("rootValue", "patternValue", "fieldValue2"),
+                                                                                        new Tuple("rootValue", "patternValue2", "fieldValue2")),
+                                                            Source.from(three).withFields("root", "pattern", "field3")
+                                                                              .withTuples(new Tuple("rootValue", "patternValue", "fieldValue3")))
+                                                      .withOutput(merged)
+                                                      .launchFlow();
             assertThat(tuples.size()).isEqualTo(1);
             Tuple tuple = tuples.get(0);
             assertThat(tuple.getString(0)).isEqualTo("rootValue");
@@ -137,30 +130,23 @@ public class CoGroupBuilderTest {
     
     @Test
     public void simpleOuterJoin() throws Exception {
-        Pipe startPipe = PipeBuilder.start("start")
-                .retain("groupField")
-                .pipe();
-        Pipe one = PipeBuilder.from(startPipe).withName("one")
-                .each().select("groupField").filterOut(EqualsFilter.value("groupValue3"))
-                .each().insertField("field1").withValue("fieldValue1")
-                .pipe();
-
-        Pipe two = PipeBuilder.from(startPipe).withName("two")
-                .each().select("groupField").filterOut(EqualsFilter.value("groupValue2"))
-                .each().select("groupField").filterOut().nullValues()
-                .each().insertField("field2").withValue("fieldValue2")
-                .pipe();
+        Pipe one = PipeBuilder.start("one").pipe();
+        Pipe two = PipeBuilder.start("two").pipe();
         
         Pipe merged = PipeBuilder.coGroup(one, two)
                 .onFields("groupField").applyOuterJoin()
                 .pipe();
         
-        List<Tuple> tuples = TestHelper.launchFlow(startPipe, merged,
-                                                   new Fields("groupField"),
-                                                   new Tuple("groupValue"),
-                                                   new Tuple("groupValue2"),
-                                                   new Tuple("groupValue3"),
-                                                   Tuple.size(1));
+        List<Tuple> tuples = TestHelper.FlowHelper.from(Source.from(one).withFields("groupField", "field1")
+                                                                        .withTuples(new Tuple("groupValue", "fieldValue1"),
+                                                                                    new Tuple("groupValue2", "fieldValue1"),
+                                                                                    new Tuple(null, "fieldValue1")),
+                                                        Source.from(two).withFields("groupField", "field2")
+                                                                        .withTuples(new Tuple("groupValue", "fieldValue2"),
+                                                                                    new Tuple("groupValue3", "fieldValue2")))
+                                                  .withOutput(merged)
+                                                  .launchFlow();
+        
         assertThat(tuples.size()).isEqualTo(4);
         {
             Tuple tuple = tuples.get(0);
@@ -194,39 +180,28 @@ public class CoGroupBuilderTest {
     
     @Test
     public void outerJoinWith3Pipes() throws Exception {
-        Pipe startPipe = PipeBuilder.start("start")
-                .retain("groupField")
-                .pipe();
-        Pipe one = PipeBuilder.from(startPipe).withName("one")
-                .each().select("groupField").filterOut(EqualsFilter.value("groupValue3"))
-                .each().select("groupField").filterOut(EqualsFilter.value("groupValue4"))
-                .each().insertField("field1").withValue("fieldValue1")
-                .pipe();
-
-        Pipe two = PipeBuilder.from(startPipe).withName("two")
-                .each().select("groupField").filterOut(EqualsFilter.value("groupValue2"))
-                .each().select("groupField").filterOut(EqualsFilter.value("groupValue4"))
-                .each().select("groupField").filterOut().nullValues()
-                .each().insertField("field2").withValue("fieldValue2")
-                .pipe();
-        
-        Pipe three = PipeBuilder.from(startPipe).withName("three")
-                .each().select("groupField").filterOut(EqualsFilter.value("groupValue1"))
-                .each().select("groupField").filterOut(EqualsFilter.value("groupValue2"))
-                .each().insertField("field3").withValue("fieldValue3")
-                .pipe();
+        Pipe one = PipeBuilder.start("one").pipe();
+        Pipe two = PipeBuilder.start("two").pipe();
+        Pipe three = PipeBuilder.start("three").pipe();
         
         Pipe merged = PipeBuilder.coGroup(one, two, three)
                 .onFields("groupField").applyOuterJoin()
                 .pipe();
         
-        List<Tuple> tuples = TestHelper.launchFlow(startPipe, merged,
-                                                   new Fields("groupField"),
-                                                   new Tuple("groupValue1"),
-                                                   new Tuple("groupValue2"),
-                                                   new Tuple("groupValue3"),
-                                                   new Tuple("groupValue4"),
-                                                   Tuple.size(1));
+        List<Tuple> tuples = TestHelper.FlowHelper.from(Source.from(one).withFields("groupField", "field1")
+                                                                        .withTuples(new Tuple("groupValue1", "fieldValue1"),
+                                                                                    new Tuple("groupValue2", "fieldValue1"),
+                                                                                    new Tuple(null, "fieldValue1")),
+                                                        Source.from(two).withFields("groupField", "field2")
+                                                                        .withTuples(new Tuple("groupValue1", "fieldValue2"),
+                                                                                    new Tuple("groupValue3", "fieldValue2")),
+                                                        Source.from(three).withFields("groupField", "field3")
+                                                                          .withTuples(new Tuple("groupValue3", "fieldValue3"),
+                                                                                      new Tuple("groupValue4", "fieldValue3"),
+                                                                                      new Tuple(null, "fieldValue3")))
+                                                  .withOutput(merged)
+                                                  .launchFlow();
+        
         assertThat(tuples.size()).isEqualTo(5);
         {
             Tuple tuple = tuples.get(0);

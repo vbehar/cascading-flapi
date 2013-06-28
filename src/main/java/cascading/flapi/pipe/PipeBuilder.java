@@ -31,7 +31,7 @@ public class PipeBuilder {
      * Starts a new instance of PipeBuilder
      */
     public static PipeBuilder_m1_m2_m3_m4_m5_m6_m7_m8_m9_m10_m11_m12_m13_m14_m15<Void> start() {
-        return PipeGenerator.start(new PipeBuilderHelper());
+        return PipeGenerator.start(new PipeBuilderHelper()).withName("start");
     }
 
     /**

@@ -61,7 +61,7 @@ public class PipeBuilder {
      *            to join
      */
     public static CoGroupBuilder_m17_m18_m19_m21_m22_m14<PipeBuilder_m1_m2_m3_m4_m5_m6_m7_m8_m9_m10_m11_m12_m13_m14_m15_m16<Void>> coGroup(Pipe... pipes) {
-        return PipeGenerator.start(new PipeBuilderHelper()).coGroup().from((Object[]) pipes);
+        return PipeGenerator.start(new PipeBuilderHelper()).coGroup().from(pipes);
     }
     
     /**

@@ -48,7 +48,7 @@ public class PipeBuilderGenerator {
                  * top-level helper methods
                  */
                  
-                .addMethod("from(Object initialPipe)")
+                .addMethod("from(cascading.pipe.Pipe initialPipe)")
                     .withDocumentation("Start from the given Pipe. " +
                     		"Note that any work done by this builder before the call to 'from' will be lost.")
                 .atMost(1)
@@ -73,7 +73,7 @@ public class PipeBuilderGenerator {
                         .withDocumentation("Configure the number of reducer tasks used for this CoGroup")
                     .atMost(1)
                     
-                    .addMethod("from(Object... pipes)")
+                    .addMethod("from(cascading.pipe.Pipe... pipes)")
                         .withDocumentation("Join the given pipes")
                     .exactly(1)
                     

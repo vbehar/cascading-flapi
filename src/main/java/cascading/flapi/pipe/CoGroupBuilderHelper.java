@@ -63,10 +63,8 @@ class CoGroupBuilderHelper implements CoGroupHelper {
     }
 
     @Override
-    public void from(Object... pipes) {
-        if (Pipe[].class.isInstance(pipes)) {
-            this.pipes = (Pipe[]) pipes;
-        }
+    public void from(Pipe... pipes) {
+        this.pipes = pipes;
     }
 
     @Override

@@ -26,6 +26,7 @@ import cascading.flapi.pipe.generated.GroupBy.GroupByHelper;
 import cascading.flapi.pipe.generated.Pipe.PipeHelper;
 import cascading.flapi.pipe.generated.RenameField.RenameFieldHelper;
 import cascading.operation.aggregator.Count;
+import cascading.pipe.Merge;
 import cascading.pipe.Pipe;
 import cascading.pipe.assembly.Discard;
 import cascading.pipe.assembly.Retain;
@@ -77,6 +78,11 @@ class PipeBuilderHelper implements PipeHelper {
     @Override
     public void groupBy(ObjectWrapper<GroupByHelper> groupByHelperWrapper) {
         groupByHelperWrapper.set(new GroupByBuilderHelper(pipeWrapper));
+    }
+    
+    @Override
+    public void merge(Pipe... pipes) {
+        pipeWrapper.set(new Merge(pipes));
     }
 
     @Override

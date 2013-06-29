@@ -207,6 +207,14 @@ public class PipeBuilderGenerator {
                 .endBlock()
                  
                 /*
+                 * Merge
+                 */
+                
+                .addMethod("merge(cascading.pipe.Pipe... pipes)")
+                    .withDocumentation("Merge the given pipes")
+                .any()
+                
+                /*
                  * Rename
                  */
                   

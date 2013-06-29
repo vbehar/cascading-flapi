@@ -115,11 +115,11 @@ public class PipeBuilderGenerator {
                         .withDocumentation("Allow the function applied to this operation to override some fields given as the input.")
                     .atMost(1)
                     
-                    .addMethod("filterOut(Object filter)")
+                    .addMethod("filterOut(cascading.operation.Filter filter)")
                         .withDocumentation("Filter out the tuples matching the given cascading Filter")
                     .last()
                     
-                    .addMethod("filterIn(Object filter)")
+                    .addMethod("filterIn(cascading.operation.Filter filter)")
                         .withDocumentation("Filter in (= keep) only the tuples matching the given cascading Filter")
                     .last()
                     
@@ -138,7 +138,7 @@ public class PipeBuilderGenerator {
                         .withDocumentation("Start a new FilterIn (= keep) Operation")
                     .last()
                     
-                    .addMethod("applyFunction(Object function)")
+                    .addMethod("applyFunction(cascading.operation.Function function)")
                         .withDocumentation("Apply the given cascading Function")
                     .last()
                     
@@ -264,7 +264,7 @@ public class PipeBuilderGenerator {
                     .withDocumentation("Set a ConfigDef property")
                 .any()
 
-                    .addMethod("inMode(Object mode)")
+                    .addMethod("inMode(cascading.property.ConfigDef.Mode mode)")
                         .withDocumentation("Using the given ConfigDef.Mode value")
                     .atMost(1, GROUP_CONFIG_PROPERTY_MODE)
 

@@ -46,32 +46,20 @@ class EachBuilderHelper extends OperationBuilderHelper implements EachHelper {
 
     @SuppressWarnings("rawtypes")
     @Override
-    public void filterOut(Object filter) {
-        if (!Filter.class.isInstance(filter)) {
-            throw new IllegalArgumentException(filter.getClass().getName() + " is not a cascading Filter !");
-        }
-
-        pipeWrapper.set(new Each(pipeWrapper.get(), argumentSelector, (Filter) filter));
+    public void filterOut(Filter filter) {
+        pipeWrapper.set(new Each(pipeWrapper.get(), argumentSelector, filter));
     }
 
     @SuppressWarnings("rawtypes")
     @Override
-    public void filterIn(Object filter) {
-        if (!Filter.class.isInstance(filter)) {
-            throw new IllegalArgumentException(filter.getClass().getName() + " is not a cascading Filter !");
-        }
-
-        filterOut(new Not((Filter) filter));
+    public void filterIn(Filter filter) {
+        filterOut(new Not(filter));
     }
 
     @SuppressWarnings("rawtypes")
     @Override
-    public void applyFunction(Object function) {
-        if (!Function.class.isInstance(function)) {
-            throw new IllegalArgumentException(function.getClass().getName() + " is not a cascading Function !");
-        }
-
-        pipeWrapper.set(new Each(pipeWrapper.get(), argumentSelector, (Function) function, outputSelector));
+    public void applyFunction(Function function) {
+        pipeWrapper.set(new Each(pipeWrapper.get(), argumentSelector, function, outputSelector));
     }
 
     @Override

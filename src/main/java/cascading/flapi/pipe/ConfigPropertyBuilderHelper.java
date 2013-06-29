@@ -76,15 +76,8 @@ class ConfigPropertyBuilderHelper implements ConfigPropertyHelper {
     }
 
     @Override
-    public void inMode(Object mode) {
-        if (Mode.class.isInstance(mode)) {
-            this.mode = (Mode) mode;
-        } else if (String.class.isInstance(mode)) {
-            try {
-                this.mode = Mode.valueOf(((String) mode).toUpperCase());
-            } catch (IllegalArgumentException e) {
-            }
-        }
+    public void inMode(Mode mode) {
+        this.mode = mode;
     }
 
     @Override

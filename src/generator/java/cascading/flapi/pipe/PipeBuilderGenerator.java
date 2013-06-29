@@ -170,8 +170,12 @@ public class PipeBuilderGenerator {
                         .withDocumentation("Restrict the fields to be used as the 'output selection' for this operation")
                     .atMost(1)
                     
-                    .addMethod("aggregate(Object aggregator)")
-                        .withDocumentation("Apply the given cascading Aggregator or Buffer")
+                    .addMethod("aggregate(cascading.operation.Aggregator aggregator)")
+                        .withDocumentation("Apply the given cascading Aggregator")
+                    .last()
+                    
+                    .addMethod("aggregate(cascading.operation.Buffer buffer)")
+                        .withDocumentation("Apply the given cascading Buffer")
                     .last()
                 
                 .endBlock()

@@ -34,15 +34,16 @@ class EveryBuilderHelper extends OperationBuilderHelper implements EveryHelper {
         this.pipeWrapper = pipeWrapper;
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
-    public void aggregate(Object aggregator) {
-        if (Aggregator.class.isInstance(aggregator)) {
-            pipeWrapper.set(new Every(pipeWrapper.get(), argumentSelector, (Aggregator<?>) aggregator, outputSelector));
-        } else if (Buffer.class.isInstance(aggregator)) {
-            pipeWrapper.set(new Every(pipeWrapper.get(), argumentSelector, (Buffer<?>) aggregator, outputSelector));
-        } else {
-            throw new IllegalArgumentException(aggregator.getClass().getName() + " is not a cascading Aggregator or Buffer !");
-        }
+    public void aggregate(Aggregator aggregator) {
+        pipeWrapper.set(new Every(pipeWrapper.get(), argumentSelector, aggregator, outputSelector));
+    }
+    
+    @SuppressWarnings("rawtypes")
+    @Override
+    public void aggregate(Buffer buffer) {
+        pipeWrapper.set(new Every(pipeWrapper.get(), argumentSelector, buffer, outputSelector));
     }
 
 }

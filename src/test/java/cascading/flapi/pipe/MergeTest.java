@@ -17,17 +17,75 @@ package cascading.flapi.pipe;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.Test;
 
+import cascading.flapi.pipe.TestHelper.FlowHelper.Source;
 import cascading.pipe.Merge;
 import cascading.pipe.Pipe;
+import cascading.tuple.Tuple;
 
 public class MergeTest {
     @Test
     public void merge() throws Exception {
-        Pipe pipe1 = PipeBuilder.start("pipe1").pipe();
-        Pipe pipe2 = PipeBuilder.start("pipe2").pipe();
-        Pipe merge = PipeBuilder.merge(pipe1, pipe2).pipe();
-        assertThat(merge).isInstanceOf(Merge.class);
+        Pipe one = PipeBuilder.start("one").pipe();
+        Pipe two = PipeBuilder.start("two").pipe();
+        Pipe three = PipeBuilder.start("three").pipe();
+        
+        Pipe merged = PipeBuilder.merge(one, two, three).pipe();
+        
+        List<Tuple> tuples = TestHelper.FlowHelper.from(Source.from(one).withFields("field1", "field2")
+                                                                        .withTuples(new Tuple("value11", "value12"),
+                                                                                    new Tuple("value21", "value22"),
+                                                                                    new Tuple(null, "value32")),
+                                                        Source.from(two).withFields("field1", "field2")
+                                                                        .withTuples(new Tuple("value41", "value42"),
+                                                                                    new Tuple("value51", "value52")),
+                                                        Source.from(three).withFields("field1", "field2")
+                                                                          .withTuples(new Tuple("value61", "value62")))
+                                                  .withOutput(merged)
+                                                  .launchFlow();
+        
+        assertThat(merged).isInstanceOf(Merge.class);
+        assertThat(tuples.size()).isEqualTo(6);
+        Collections.sort(tuples);
+        {
+            Tuple tuple = tuples.get(0);
+            assertThat(tuple.size()).isEqualTo(2);
+            assertThat(tuple.getString(0)).isNull();
+            assertThat(tuple.getString(1)).isEqualTo("value32");
+        }
+        {
+            Tuple tuple = tuples.get(1);
+            assertThat(tuple.size()).isEqualTo(2);
+            assertThat(tuple.getString(0)).isEqualTo("value11");
+            assertThat(tuple.getString(1)).isEqualTo("value12");
+        }
+        {
+            Tuple tuple = tuples.get(2);
+            assertThat(tuple.size()).isEqualTo(2);
+            assertThat(tuple.getString(0)).isEqualTo("value21");
+            assertThat(tuple.getString(1)).isEqualTo("value22");
+        }
+        {
+            Tuple tuple = tuples.get(3);
+            assertThat(tuple.size()).isEqualTo(2);
+            assertThat(tuple.getString(0)).isEqualTo("value41");
+            assertThat(tuple.getString(1)).isEqualTo("value42");
+        }
+        {
+            Tuple tuple = tuples.get(4);
+            assertThat(tuple.size()).isEqualTo(2);
+            assertThat(tuple.getString(0)).isEqualTo("value51");
+            assertThat(tuple.getString(1)).isEqualTo("value52");
+        }
+        {
+            Tuple tuple = tuples.get(5);
+            assertThat(tuple.size()).isEqualTo(2);
+            assertThat(tuple.getString(0)).isEqualTo("value61");
+            assertThat(tuple.getString(1)).isEqualTo("value62");
+        }
     }
 }

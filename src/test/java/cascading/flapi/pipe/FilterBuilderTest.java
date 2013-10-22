@@ -22,7 +22,7 @@ import java.lang.reflect.Field;
 import org.junit.Test;
 
 import cascading.operation.expression.ExpressionFilter;
-import cascading.operation.expression.ExpressionOperation;
+import cascading.operation.expression.ScriptOperation;
 import cascading.operation.filter.FilterNull;
 import cascading.operation.filter.Not;
 import cascading.pipe.Each;
@@ -54,22 +54,23 @@ public class FilterBuilderTest {
         assertThat(each.isFilter()).isTrue();
         assertThat(each.getFilter()).isInstanceOf(ExpressionFilter.class);
         
-        Field expressionField = ExpressionOperation.class.getDeclaredField("expression");
+        Field expressionField = ScriptOperation.class.getDeclaredField("block");
         expressionField.setAccessible(true);
         Object expressionObj = expressionField.get(each.getFilter());
         assertThat(expressionObj).isInstanceOf(String.class);
         assertThat(expressionObj).isEqualTo("url.startsWith(\"https\")");
 
-        Field parameterTypesField = ExpressionOperation.class.getDeclaredField("parameterTypes");
+        Field parameterTypesField = ScriptOperation.class.getDeclaredField("parameterTypes");
         parameterTypesField.setAccessible(true);
         Object parameterTypesObj = parameterTypesField.get(each.getFilter());
         assertThat(parameterTypesObj).isInstanceOf(Class[].class);
         assertThat(parameterTypesObj).isEqualTo(new Class[] { String.class });
 
-        Field parameterNamesField = ExpressionOperation.class.getDeclaredField("parameterNames");
+        Field parameterNamesField = ScriptOperation.class.getDeclaredField("parameterNames");
         parameterNamesField.setAccessible(true);
         Object parameterNamesObj = parameterNamesField.get(each.getFilter());
-        assertThat(parameterNamesObj).isNull();
+        assertThat(parameterNamesObj).isInstanceOf(String[].class);
+        assertThat(parameterNamesObj).isEqualTo(new String[]{"url"});
     }
 
     @Test

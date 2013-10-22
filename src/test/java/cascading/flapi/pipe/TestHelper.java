@@ -102,19 +102,22 @@ class TestHelper {
                     Source source = sources[sourceId];
                     File input = new File(tmpDir, "input"+sourceId+".csv");
                     FileWriter writer = new FileWriter(input);
-                    for(Tuple tuple : source.tuples) {
-                        if(source.fields.size() != tuple.size()) {
-                            throw new IllegalArgumentException("Number of input fields is not the same of value of input tuple");
+                    try {
+                        for(Tuple tuple : source.tuples) {
+                            if(source.fields.size() != tuple.size()) {
+                                throw new IllegalArgumentException("Number of input fields is not the same of value of input tuple");
+                            }
+                            writer.write((tuple.getString(0) == null)? "" : tuple.getString(0));
+                            for(int i=1; i<tuple.size(); i++) {
+                                writer.write("\t");
+                                writer.write((tuple.getString(i) == null)? "" : tuple.getString(i));
+                            }
+                            writer.write("\n");
                         }
-                        writer.write((tuple.getString(0) == null)? "" : tuple.getString(0));
-                        for(int i=1; i<tuple.size(); i++) {
-                            writer.write("\t");
-                            writer.write((tuple.getString(i) == null)? "" : tuple.getString(i));
-                        }
-                        writer.write("\n");
+                    } finally {
+                        writer.flush();
+                        writer.close();
                     }
-                    writer.flush();
-                    writer.close();
                     FileTap inputTap = new FileTap(new TextDelimited(source.fields), input.getAbsolutePath());
                     flowDef.addSource(source.pipe, inputTap);
                 }

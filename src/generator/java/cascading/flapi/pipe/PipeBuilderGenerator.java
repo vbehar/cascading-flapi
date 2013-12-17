@@ -203,6 +203,11 @@ public class PipeBuilderGenerator {
                     .addMethod("withSortOnFields(Comparable... sortFields)")
                         .withDocumentation("Sorts the grouped values on the given fields names")
                     .atMost(1)
+                    
+                    .addMethod("withSortComparators(java.util.Comparator... comparators)")
+                        .withDocumentation("Sorts the grouped values on the given fields names with comparators. " +
+                        		"The Comparator array must be the same length as the number for fields.")
+                    .atMost(1)
                      
                     .addMethod("onFields(Comparable... fields)")
                         .withDocumentation("Apply a GroupBy that will group on the given field names")

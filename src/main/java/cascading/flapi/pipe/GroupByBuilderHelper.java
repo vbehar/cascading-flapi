@@ -15,6 +15,8 @@
  */
 package cascading.flapi.pipe;
 
+import java.util.Comparator;
+
 import unquietcode.tools.flapi.support.ObjectWrapper;
 import cascading.flapi.pipe.ConfigPropertyBuilderHelper.ConfigScope;
 import cascading.flapi.pipe.generated.ConfigProperty.ConfigPropertyHelper;
@@ -35,6 +37,9 @@ class GroupByBuilderHelper implements GroupByHelper {
     private boolean reverseOrder = false;
 
     private Fields sortFields;
+    
+    @SuppressWarnings("rawtypes")
+    private Comparator[] sortComparators;
 
     private int numberOfReducers = -1;
 
@@ -68,11 +73,22 @@ class GroupByBuilderHelper implements GroupByHelper {
         }
     }
 
+
+    @Override
+    public void withSortComparators(@SuppressWarnings("rawtypes") Comparator... comparators) {
+        if(comparators != null && comparators.length > 0) { 
+            this.sortComparators = comparators;
+        }
+    }
+    
     /*
      * Last method - apply the operation
      */
     @Override
     public void onFields(@SuppressWarnings("rawtypes") Comparable... fields) {
+        if(sortComparators != null && sortFields != null) {
+            sortFields.setComparators(sortComparators);
+        }
         // apply
         pipeWrapper.set(new GroupBy(pipeWrapper.get(), PipeBuilder.getSelector(fields), sortFields, reverseOrder));
 
